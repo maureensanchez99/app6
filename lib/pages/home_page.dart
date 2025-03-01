@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'wordsearch_page.dart';
+import 'thirdfloor_page.dart';
+import 'popquiz_page.dart';
+import 'paneraquiz_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key, required this.title});
@@ -27,7 +30,39 @@ class HomePage extends StatelessWidget {
               ),
               child: const Text("Wordsearch"),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ThirdFloor()),
+              ),
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: Colors.black),
+              ),
+              child: const Text("Third Floor Challenge"),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const PopQuiz()),
+              ),
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: Colors.black),
+              ),
+              child: const Text("Pop Quiz"),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const PaneraQuiz()),
+              ),
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: Colors.black),
+              ),
+              child: const Text("Panera Quiz"),
+            ),
           ],
         ),
       ),
