@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'pages/home_page.dart';
+import 'pages/welcome_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.lime),
         useMaterial3: true,
       ),
-      home: const HomePage(title: "PFT Scavenger Hunt"),
+      home: const WelcomeScreen(),
     );
   }
 }
