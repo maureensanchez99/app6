@@ -4,6 +4,7 @@ import 'thirdfloor_page.dart';
 import 'popquiz_page.dart';
 import 'paneraquiz_page.dart';
 import 'capstone_stairs.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
@@ -18,9 +19,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   // LSU colors
   static const Color lsuPurple = Color(0xFF461D7C); // LSU Purple
   static const Color lsuGold = Color(0xFFE6C423);   // Slightly less bright LSU Gold
+  static const Color progressGreen = Color.fromARGB(255, 22, 216, 4); // for progress
   
   // Progress value (0.0 to 1.0)
   double progressValue = 0.0;
+  
+  // Challenge tracking
+  final int totalChallenges = 5;
+  Set<String> visitedChallenges = {};
   
   late AnimationController _animationController;
   
@@ -31,12 +37,59 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       vsync: this,
       duration: const Duration(seconds: 3),
     )..repeat(reverse: true);
+    
+    // Load visited challenges from storage
+    _loadVisitedChallenges();
   }
   
   @override
   void dispose() {
     _animationController.dispose();
     super.dispose();
+  }
+  
+  // Load visited challenges from SharedPreferences
+  Future<void> _loadVisitedChallenges() async {
+    final prefs = await SharedPreferences.getInstance();
+    final visited = prefs.getStringList('visited_challenges') ?? [];
+    
+    setState(() {
+      visitedChallenges = Set<String>.from(visited);
+      _updateProgressValue();
+    });
+  }
+  
+  // Save visited challenges to SharedPreferences
+  Future<void> _saveVisitedChallenges() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList('visited_challenges', visitedChallenges.toList());
+  }
+  
+  // Update progress value based on visited challenges
+  void _updateProgressValue() {
+    setState(() {
+      progressValue = visitedChallenges.length / totalChallenges;
+    });
+  }
+  
+  // Mark a challenge as visited and update progress
+  void _markChallengeVisited(String challengeId) {
+    if (!visitedChallenges.contains(challengeId)) {
+      setState(() {
+        visitedChallenges.add(challengeId);
+        _updateProgressValue();
+      });
+      _saveVisitedChallenges();
+    }
+  }
+  
+  // Navigate to a challenge and mark it as visited
+  void _navigateToChallenge(BuildContext context, Widget challenge, String challengeId) {
+    _markChallengeVisited(challengeId);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => challenge),
+    );
   }
   
   @override
@@ -149,52 +202,96 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     "Find hidden words in the grid",
                     Icons.search,
                     Colors.amber,
-                    () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const WordSearch()),
-                    ),
+                    () => _navigateToChallenge(context, const WordSearch(), "word_search"),
+                    visitedChallenges.contains("word_search"),
                   ),
                   _buildChallengeCard(
                     "Third Floor",
                     "Find out more about the third floor of PFT",
                     Icons.stairs,
                     Colors.amber,
-                    () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const ThirdFloor()),
-                    ),
+                    () => _navigateToChallenge(context, const ThirdFloor(), "third_floor"),
+                    visitedChallenges.contains("third_floor"),
                   ),
                   _buildChallengeCard(
                     "Pop Quiz",
                     "Test your knowledge",
                     Icons.quiz,
                     Colors.amber,
-                    () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const PopQuiz()),
-                    ),
+                    () => _navigateToChallenge(context, const PopQuiz(), "pop_quiz"),
+                    visitedChallenges.contains("pop_quiz"),
                   ),
                   _buildChallengeCard(
                     "Panera Quiz",
                     "Food-related questions",
                     Icons.restaurant,
                     Colors.amber,
-                    () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const PaneraQuiz()),
-                    ),
+                    () => _navigateToChallenge(context, const PaneraQuiz(), "panera_quiz"),
+                    visitedChallenges.contains("panera_quiz"),
                   ),
                   _buildChallengeCard(
                     "Anagram Challenge",
                     "Unscramble the words to reveal a clue",
                     Icons.text_fields,
                     Colors.amber,
-                    () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const CapstoneStairs()),
-                    ),
+                    () => _navigateToChallenge(context, const CapstoneStairs(), "anagram"),
+                    visitedChallenges.contains("anagram"),
                   ),
                 ],
+              ),
+            ),
+            
+            // Reset progress button
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: TextButton.icon(
+                  onPressed: () {
+                    // Show confirmation dialog
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text("Reset Progress"),
+                          content: const Text("Are you sure you want to reset your progress? This cannot be undone."),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(); // Close dialog
+                              },
+                              child: const Text("Cancel"),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                // Reset progress
+                                setState(() {
+                                  visitedChallenges.clear();
+                                  _updateProgressValue();
+                                });
+                                _saveVisitedChallenges();
+                                Navigator.of(context).pop(); // Close dialog
+                              },
+                              child: const Text("Reset"),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  icon: const Icon(Icons.refresh, size: 16, color: Colors.white),
+                  label: const Text(
+                    "Reset Progress",
+                    style: TextStyle(color: Colors.white, fontSize: 12),
+                  ),
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.red.withOpacity(0.3),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                ),
               ),
             ),
             
@@ -205,17 +302,17 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Row(
+                  Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.emoji_events,
                         color: Colors.amber,
                         size: 24,
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Text(
-                        "Your Progress",
-                        style: TextStyle(
+                        "Your Progress (${(progressValue * 100).toInt()}%)",
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -230,7 +327,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                       value: progressValue,
                       minHeight: 12,
                       backgroundColor: Colors.white.withOpacity(0.3),
-                      valueColor: const AlwaysStoppedAnimation<Color>(Colors.amber),
+                      valueColor: const AlwaysStoppedAnimation<Color>(progressGreen),
                     ),
                   ),
                 ],
@@ -242,14 +339,26 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     );
   }
   
-  Widget _buildChallengeCard(String title, String subtitle, IconData icon, Color iconColor, VoidCallback onTap) {
+  Widget _buildChallengeCard(
+    String title, 
+    String subtitle, 
+    IconData icon, 
+    Color iconColor, 
+    VoidCallback onTap,
+    bool isVisited,
+  ) {
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       elevation: 0,
-      color: Colors.white.withOpacity(0.15),
+      color: isVisited 
+          ? Colors.white.withOpacity(0.25) 
+          : Colors.white.withOpacity(0.15),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: const BorderSide(color: Colors.amber, width: 0.85),
+        side: BorderSide(
+          color: isVisited ? progressGreen : Colors.amber, 
+          width: 0.85
+        ),
       ),
       child: InkWell(
         onTap: onTap,
@@ -260,7 +369,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             children: [
               Icon(
                 icon,
-                color: Colors.amber,
+                color: isVisited ? progressGreen : Colors.amber,
                 size: 30,
               ),
               const SizedBox(width: 18),
@@ -268,13 +377,26 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+                    Row(
+                      children: [
+                        Text(
+                          title,
+                          style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        if (isVisited) 
+                          const Padding(
+                            padding: EdgeInsets.only(left: 8),
+                            child: Icon(
+                              Icons.check_circle,
+                              color: progressGreen,
+                              size: 16,
+                            ),
+                          ),
+                      ],
                     ),
                     const SizedBox(height: 2),
                     Text(
@@ -287,9 +409,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   ],
                 ),
               ),
-              const Icon(
+              Icon(
                 Icons.chevron_right,
-                color: Colors.white,
+                color: isVisited ? progressGreen : Colors.white,
                 size: 24,
               ),
             ],
