@@ -17,7 +17,8 @@ class _ThirdFloorState extends State<ThirdFloor> {
     'The third floor is the quietest place for studying 🤓',
     'The department suites for each engineering major are found here',
     'Only the Commons stairs and elevators can get you to the third floor, so try not to get lost!',
-    'There is a robot somewhere on the third floor, but you did not hear it from me 🤫'
+    'There is a robot somewhere on the third floor, but you did not hear it from me 🤫',
+    ''
   ];
 
   String currentFact = ''; // To store the current random fact
@@ -45,7 +46,15 @@ class _ThirdFloorState extends State<ThirdFloor> {
         centerTitle: true,
       ),
       backgroundColor:  Color(0xFF461D7C),
-      body: Padding(
+       body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF461D7C), Color(0xFFFDD023)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+      child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
           child: Column(
@@ -61,8 +70,9 @@ class _ThirdFloorState extends State<ThirdFloor> {
               ElevatedButton(
                 onPressed: getRandomFact,
                 child: const Text('Generate Fact'),
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
