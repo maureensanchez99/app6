@@ -9,7 +9,7 @@ class WordSearch extends StatefulWidget {
 }
 
 class _WordSearchState extends State<WordSearch> {
-  final int gridSize = 7;
+  final int gridSize = 6;
   final List<String> words = ["ROBOT", "FIGHT", "CLUB", "DESIGN"];
   late List<List<String>> grid;
   late List<List<bool>> highlighted;
@@ -18,6 +18,7 @@ class _WordSearchState extends State<WordSearch> {
   Set<String> foundWords = {};
   List<int>? selectionDirection;
   List<List<int>> selectionPath = [];
+  Map<String, List<List<int>>> foundWordPaths = {}; 
 
   @override
   void initState() {
@@ -113,12 +114,17 @@ class _WordSearchState extends State<WordSearch> {
 
             if (words.contains(currentWord)) {
               foundWords.add(currentWord);
+              _storeFoundWordPath(currentWord, selectionPath);
               _resetSelection();
             }
           }
         }
       }
     });
+  }
+
+  void _storeFoundWordPath(String word, List<List<int>> path) {
+    foundWordPaths[word] = path;
   }
 
   void _resetSelection() {
@@ -134,15 +140,26 @@ class _WordSearchState extends State<WordSearch> {
 
   @override
   Widget build(BuildContext context) {
-    double cellSize = 40.0; // Set a fixed cell size
-    double gridSizePx = gridSize * (cellSize + 4); // Calculate total grid size with spacing
+    double cellSize = 40.0;  
+    double gridSizePx = gridSize * (cellSize + 4);  
 
     return Scaffold(
       appBar: AppBar(title: const Text("Find four words that lead to the clue")),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("Words Found: ${foundWords.length}/4", style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          // Display found words
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: foundWords.map((word) => Text(
+                word,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              )).toList(),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text("Words Found: ${foundWords.length}/${words.length}", style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           const SizedBox(height: 10),
           Center(
             child: SizedBox(
@@ -151,7 +168,7 @@ class _WordSearchState extends State<WordSearch> {
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: gridSize,
-                  childAspectRatio: 1.0, 
+                  childAspectRatio: 1.0,
                 ),
                 itemCount: gridSize * gridSize,
                 itemBuilder: (context, index) {
@@ -164,7 +181,7 @@ class _WordSearchState extends State<WordSearch> {
                       height: cellSize,
                       margin: const EdgeInsets.all(2),
                       decoration: BoxDecoration(
-                        color: highlighted[row][col] ? (foundWords.contains(currentWord) ? Colors.green : Colors.yellow) : Colors.white,
+                        color: _getCellColor(row, col),
                         border: Border.all(color: Colors.black),
                       ),
                       alignment: Alignment.center,
@@ -186,5 +203,19 @@ class _WordSearchState extends State<WordSearch> {
         ],
       ),
     );
+  }
+
+  Color _getCellColor(int row, int col) {
+    for (var word in foundWords) {
+      if (foundWordPaths[word]!.any((pos) => pos[0] == row && pos[1] == col)) {
+        return Colors.green;  
+      }
+    }
+
+    if (highlighted[row][col]) {
+      return Colors.yellow;  
+    }
+
+    return Colors.white;  
   }
 }
