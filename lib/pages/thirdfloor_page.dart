@@ -11,8 +11,8 @@ class ThirdFloor extends StatefulWidget {
 class _ThirdFloorState extends State<ThirdFloor> {
   // List of facts
   final List<String> facts = [
-    'The third floor holds all the offices for faculty and staff',
-    'You can get a wonderful view of the commons area from the third floor staircase',
+    'The third floor is primarily used as the office space for faculty and staff',
+    'You can get a wonderful view of the commons area from the third floor staircase, so take lots of pictures!',
     'Not only can you find labs on the first and second floor, but on the third floor as well!',
     'The third floor is the quietest place for studying 🤓',
     'The department suites for each engineering major are found here',
@@ -35,7 +35,7 @@ class _ThirdFloorState extends State<ThirdFloor> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Third Floor Mysteries",
+          "Third Floor Facts",
           style: const TextStyle(
             color: Color(0xFF461D7C),
             fontWeight: FontWeight.bold,
