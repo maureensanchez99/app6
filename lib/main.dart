@@ -1,3 +1,4 @@
+import 'package:app6/pages/paneraquiz_page.dart';
 import 'package:flutter/material.dart';
 import 'pages/welcome_screen.dart';
 
@@ -11,6 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'PFT Scavenger Hunt',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF461D7C)),

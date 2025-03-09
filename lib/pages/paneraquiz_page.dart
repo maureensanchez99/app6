@@ -34,7 +34,7 @@ class Quiz extends StatefulWidget {
 class _Quiz extends State<Quiz> {
   int correctQuestions = 0;
   bool started = false;
-  int n = 4;
+  int n = 0;
 
   void incrementQuestions() {
     setState(() {
@@ -48,6 +48,13 @@ class _Quiz extends State<Quiz> {
     });
   }
 
+  void reset() {
+    setState(() {
+      n = 0;
+      correctQuestions = 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     switch (n) {
@@ -57,7 +64,6 @@ class _Quiz extends State<Quiz> {
             function: nextPage,
           );
         }
-
       case 1:
         {
           return Column(
@@ -80,7 +86,7 @@ class _Quiz extends State<Quiz> {
             ],
           );
         }
-        case 2:
+      case 2:
         {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -102,7 +108,7 @@ class _Quiz extends State<Quiz> {
             ],
           );
         }
-        case 3:
+      case 3:
         {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -124,7 +130,7 @@ class _Quiz extends State<Quiz> {
             ],
           );
         }
-        case 4:
+      case 4:
         {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -168,7 +174,13 @@ class _Quiz extends State<Quiz> {
             ],
           );
         }
-
+      case 6:
+        {
+          return EndScreen(
+            function: reset,
+            score: correctQuestions,
+          );
+        }
       default:
         return StartScreen(
           function: nextPage,
@@ -176,8 +188,6 @@ class _Quiz extends State<Quiz> {
     } //StartScreen(function: startQuiz,);
   }
 }
-
-
 
 class StartScreen extends StatefulWidget {
   Function? function;
@@ -211,8 +221,6 @@ class _StartScreen extends State<StartScreen> {
     );
   }
 }
-
-
 
 class BreakfastQuestion extends StatefulWidget {
   Function? function;
@@ -357,10 +365,10 @@ class _BreakfastQuestion extends State<BreakfastQuestion> {
                   onPressed: answered
                       ? null
                       : () => {
-                              widget.function!(),
-                              answered = true,
-                              correctAnswer(context, widget.nextFunction)
-                            },
+                            widget.function!(),
+                            answered = true,
+                            correctAnswer(context, widget.nextFunction)
+                          },
                   style: ButtonStyle(
                       shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)))),
@@ -390,8 +398,6 @@ class _BreakfastQuestion extends State<BreakfastQuestion> {
     );
   }
 }
-
-
 
 class SnackQuestion extends StatefulWidget {
   Function? function;
@@ -439,10 +445,10 @@ class _SnackQuestion extends State<SnackQuestion> {
                       onPressed: answered
                           ? null
                           : () => {
-                              widget.function!(),
-                              answered = true,
-                              correctAnswer(context, widget.nextFunction)
-                            },
+                                widget.function!(),
+                                answered = true,
+                                correctAnswer(context, widget.nextFunction)
+                              },
                       style: ButtonStyle(
                           shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20)))),
@@ -536,10 +542,10 @@ class _SnackQuestion extends State<SnackQuestion> {
                   onPressed: answered
                       ? null
                       : () => {
-                              answered = true,
-                              incorrectAnswer(context, widget.nextFunction),
-                              setState(() {})
-                            },
+                            answered = true,
+                            incorrectAnswer(context, widget.nextFunction),
+                            setState(() {})
+                          },
                   style: ButtonStyle(
                       shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)))),
@@ -569,8 +575,6 @@ class _SnackQuestion extends State<SnackQuestion> {
     );
   }
 }
-
-
 
 class LunchQuestion extends StatefulWidget {
   Function? function;
@@ -618,10 +622,10 @@ class _LunchQuestion extends State<LunchQuestion> {
                       onPressed: answered
                           ? null
                           : () => {
-                              answered = true,
-                              incorrectAnswer(context, widget.nextFunction),
-                              setState(() {})
-                            },
+                                answered = true,
+                                incorrectAnswer(context, widget.nextFunction),
+                                setState(() {})
+                              },
                       style: ButtonStyle(
                           shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20)))),
@@ -715,10 +719,10 @@ class _LunchQuestion extends State<LunchQuestion> {
                   onPressed: answered
                       ? null
                       : () => {
-                              answered = true,
-                              incorrectAnswer(context, widget.nextFunction),
-                              setState(() {})
-                            },
+                            answered = true,
+                            incorrectAnswer(context, widget.nextFunction),
+                            setState(() {})
+                          },
                   style: ButtonStyle(
                       shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)))),
@@ -748,8 +752,6 @@ class _LunchQuestion extends State<LunchQuestion> {
     );
   }
 }
-
-
 
 class DinnerQuestion extends StatefulWidget {
   Function? function;
@@ -797,10 +799,10 @@ class _DinnerQuestion extends State<DinnerQuestion> {
                       onPressed: answered
                           ? null
                           : () => {
-                              answered = true,
-                              incorrectAnswer(context, widget.nextFunction),
-                              setState(() {})
-                            },
+                                answered = true,
+                                incorrectAnswer(context, widget.nextFunction),
+                                setState(() {})
+                              },
                       style: ButtonStyle(
                           shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20)))),
@@ -894,10 +896,10 @@ class _DinnerQuestion extends State<DinnerQuestion> {
                   onPressed: answered
                       ? null
                       : () => {
-                              widget.function!(),
-                              answered = true,
-                              correctAnswer(context, widget.nextFunction)
-                            },
+                            widget.function!(),
+                            answered = true,
+                            correctAnswer(context, widget.nextFunction)
+                          },
                   style: ButtonStyle(
                       shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)))),
@@ -927,8 +929,6 @@ class _DinnerQuestion extends State<DinnerQuestion> {
     );
   }
 }
-
-
 
 class DrinkQuestion extends StatefulWidget {
   Function? function;
@@ -1107,7 +1107,44 @@ class _DrinkQuestion extends State<DrinkQuestion> {
   }
 }
 
+class EndScreen extends StatefulWidget {
+  Function? function;
+  int? score;
+  EndScreen({super.key, this.function, this.score});
 
+  @override
+  State<EndScreen> createState() => _EndScreen();
+}
+
+class _EndScreen extends State<EndScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset("assets/paneraLogo.png"),
+        widget.score == 1
+            ? Text(
+                "You Scored ${widget.score} Point!",
+                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+              )
+            : Text(
+                "You Scored ${widget.score} Points!",
+                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+              ),
+        Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: TextButton(
+              onPressed: () => widget.function!(),
+              child: Text(
+                "RESTART?",
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              )),
+        )
+      ],
+    );
+  }
+}
 
 Future<void> correctAnswer(BuildContext context, Function? function) {
   return showDialog(
