@@ -67,6 +67,10 @@ class TutorialPage extends StatelessWidget {
                         '5',
                         'Visit Panera and answer questions to complete challenge.',
                       ),
+                      _buildTutorialStep(
+                        '6',
+                        'Solve the anagram to find the next spot.',
+                      ),
                     ],
                   ),
                 ),
