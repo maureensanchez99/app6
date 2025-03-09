@@ -3,6 +3,7 @@ import 'wordsearch_page.dart';
 import 'thirdfloor_page.dart';
 import 'popquiz_page.dart';
 import 'paneraquiz_page.dart';
+import 'capstone_stairs.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key, required this.title});
@@ -63,6 +64,17 @@ class HomePage extends StatelessWidget {
                 side: const BorderSide(color: Colors.black),
               ),
               child: const Text("Panera Quiz"),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CapstoneStairs()),
+              ),
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: Colors.black),
+              ),
+              child: const Text("Puzzle"),
             ),
           ],
         ),
