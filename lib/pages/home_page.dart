@@ -15,7 +15,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor:
-            Color(0xFFFDD023), //Theme.of(context).colorScheme.inversePrimary,
+            Color(0xFFFDD023),
         title: Text("PFT Scavenger Hunt"),
       ),
       body: Center(
