@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'home_page.dart';
 
 void main() {
   runApp(const PopQuiz());
@@ -208,6 +209,13 @@ class _QuizScreenState extends State<QuizScreen> {
             },
             child: const Text('Restart'),
           ),
+          TextButton(
+            onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HomePage(title: '',)),
+              ),
+            child: const Text('Return'),
+            )
         ],
       ),
     );
