@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'home_page.dart';
 import 'resultsquiz_page.dart';
 
 void main() {
@@ -247,13 +246,17 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   void showResults() {
-    // Calculate total time taken
-    int totalTimeTaken = questions.length * maxTime - remainingTime;
+    // Calculate total time taken (in seconds)
+    int totalTimeTaken = 0;
+
+    // If you've been tracking time per question, add them up
+    // Otherwise estimate based on remaining time in last question
+    totalTimeTaken = questions.length * maxTime - remainingTime;
 
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const ResultsPage(
+        builder: (context) => ResultsPage(
           score: score,
           totalTime: totalTimeTaken,
           questions: questions,

@@ -10,7 +10,7 @@ class CapstoneStairs extends StatefulWidget {
 class _CapstoneStairsState extends State<CapstoneStairs> {
   final List<String> scrambledWords = [
     "MOCE",
-    "MAGH",
+    "NAGH",
     "TUO",
     "NO",
     "EHT",
