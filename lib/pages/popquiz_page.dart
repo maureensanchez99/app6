@@ -75,6 +75,8 @@ class _QuizScreenState extends State<QuizScreen> {
   int currentQuestionIndex = 0;
   int remainingTime = 30;
   Timer? timer;
+  int? selectedAnswerIndex;
+  bool answerRevealed = false;
 
   void startTimer() {
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -82,9 +84,19 @@ class _QuizScreenState extends State<QuizScreen> {
         if (remainingTime > 0) {
           remainingTime--;
         } else {
-          nextQuestion();
+          revealAnswer();
         }
       });
+    });
+  }
+
+  void revealAnswer() {
+    setState(() {
+      answerRevealed = true;
+    });
+
+    Future.delayed(const Duration(seconds: 2), () {
+      nextQuestion();
     });
   }
 
@@ -94,6 +106,8 @@ class _QuizScreenState extends State<QuizScreen> {
       setState(() {
         currentQuestionIndex++;
         remainingTime = 30;
+        selectedAnswerIndex = null;
+        answerRevealed = false;
       });
       startTimer();
     } else {
@@ -102,8 +116,13 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   void checkAnswer(int selectedIndex) {
+    setState(() {
+      selectedAnswerIndex = selectedIndex;
+      answerRevealed = true;
+    });
     timer?.cancel();
-    Future.delayed(const Duration(seconds: 1), () {
+
+    Future.delayed(const Duration(seconds: 2), () {
       nextQuestion();
     });
   }
@@ -121,6 +140,8 @@ class _QuizScreenState extends State<QuizScreen> {
               setState(() {
                 currentQuestionIndex = 0;
                 remainingTime = 30;
+                selectedAnswerIndex = null;
+                answerRevealed = false;
               });
               startTimer();
             },
@@ -146,6 +167,8 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   Widget build(BuildContext context) {
     var question = questions[currentQuestionIndex];
+    int correctAnswerIndex = question['answerIndex'];
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('LSU PFT Quiz'),
@@ -171,14 +194,23 @@ class _QuizScreenState extends State<QuizScreen> {
             ),
             const SizedBox(height: 30),
             ...List.generate(4, (index) {
+              Color buttonColor = const Color(0xFF461D7C); // Default LSU Purple
+              if (answerRevealed) {
+                if (index == correctAnswerIndex) {
+                  buttonColor = Colors.green; // Correct answer
+                } else if (selectedAnswerIndex == index) {
+                  buttonColor = Colors.red; // Wrong selection
+                }
+              }
+
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: ElevatedButton(
-                  onPressed: () => checkAnswer(index),
+                  onPressed: selectedAnswerIndex == null
+                      ? () => checkAnswer(index)
+                      : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: index == question['answerIndex']
-                        ? Colors.green
-                        : const Color(0xFF461D7C),
+                    backgroundColor: buttonColor,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 15),
                     textStyle: const TextStyle(
