@@ -261,11 +261,34 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               ),
             ),
             
-            // Reset progress button
+            // Progress section
+            Container(
+              padding: const EdgeInsets.all(16),
+              color: Colors.black.withOpacity(0.2),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.emoji_events,
+                        color: Colors.amber,
+                        size: 24,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        "Your Progress (${(progressValue * 100).toInt()}%)",
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      // Reset progress button
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Align(
-                alignment: Alignment.centerRight,
+                alignment: Alignment.bottomRight,
                 child: TextButton.icon(
                   onPressed: () {
                     // Show confirmation dialog
@@ -314,30 +337,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 ),
               ),
             ),
-            
-            // Progress section
-            Container(
-              padding: const EdgeInsets.all(16),
-              color: Colors.black.withOpacity(0.2),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.emoji_events,
-                        color: Colors.amber,
-                        size: 24,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        "Your Progress (${(progressValue * 100).toInt()}%)",
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
                     ],
                   ),
                   const SizedBox(height: 8),
