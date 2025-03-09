@@ -4,6 +4,7 @@ import 'thirdfloor_page.dart';
 import 'popquiz_page.dart';
 import 'paneraquiz_page.dart';
 import 'capstone_stairs.dart';
+import 'chevron_center.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key, required this.title});
@@ -75,6 +76,17 @@ class HomePage extends StatelessWidget {
                 side: const BorderSide(color: Colors.black),
               ),
               child: const Text("Anagram"),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ChevronCenter()),
+              ),
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: Colors.black),
+              ),
+              child: const Text("Chevron Center"),
             ),
           ],
         ),
