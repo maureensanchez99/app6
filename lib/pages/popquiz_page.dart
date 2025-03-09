@@ -15,6 +15,13 @@ class PopQuiz extends StatelessWidget {
       theme: ThemeData(
         primaryColor: const Color(0xFF461D7C), // LSU Purple
         scaffoldBackgroundColor: const Color(0xFFFDD023), // LSU Gold
+        // Ensure button themes don't override our specific styling
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF461D7C),
+            foregroundColor: Colors.white,
+          ),
+        ),
       ),
       home: const QuizScreen(),
     );
@@ -168,14 +175,14 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   void checkAnswer(int selectedIndex) {
+    timer?.cancel(); // Stop the timer since the user answered
+
     setState(() {
       selectedAnswerIndex = selectedIndex; // Store selected answer
       answerRevealed = true; // Reveal the correct answer
     });
 
-    timer?.cancel(); // Stop the timer since the user answered
-
-    // Delay before proceeding to the next question, allowing UI to update
+    // Delay before proceeding to the next question, allowing UI to update and user to see feedback
     Future.delayed(const Duration(seconds: 2), () {
       nextQuestion();
     });
@@ -248,7 +255,10 @@ class _QuizScreenState extends State<QuizScreen> {
             ),
             const SizedBox(height: 30),
             ...List.generate(4, (index) {
+              // Define base button color - make sure it's always applied
               Color buttonColor = const Color(0xFF461D7C); // Default LSU Purple
+
+              // Modify buttonColor based on answer status
               if (answerRevealed) {
                 if (index == correctAnswerIndex) {
                   buttonColor = Colors.green; // Correct answer
@@ -259,18 +269,27 @@ class _QuizScreenState extends State<QuizScreen> {
 
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: ElevatedButton(
-                  onPressed: selectedAnswerIndex == null
-                      ? () => checkAnswer(index)
-                      : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: buttonColor,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                    textStyle: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    color: buttonColor,
                   ),
-                  child: Text(question['options'][index]),
+                  child: ElevatedButton(
+                    onPressed: answerRevealed ? null : () => checkAnswer(index),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: buttonColor, // Ensure color is applied
+                      foregroundColor: Colors.white,
+                      elevation: 4.0, // Add shadow for better visibility
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      textStyle: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
+                      // Ensure the button has no borders that might interfere
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    child: Text(question['options'][index]),
+                  ),
                 ),
               );
             }),
