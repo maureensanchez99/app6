@@ -16,7 +16,7 @@ class _ThirdFloorState extends State<ThirdFloor> {
     'Not only can you find labs on the first and second floor, but on the third floor as well!',
     'The third floor is the quietest place for studying 🤫',
     'The department suites for each engineering major are found here',
-    '',
+    'Only the Commons stairs and elevators can get you to the third floor, so try not to get lost!',
   ];
 
   String currentFact = ''; // To store the current random fact

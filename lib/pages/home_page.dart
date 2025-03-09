@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: Colors.black),
               ),
-              child: const Text("Third Floor Challenge"),
+              child: const Text("Third Floor Mysteries"),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
@@ -100,6 +100,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: Colors.black),
               ),
+              child: const Text('Anagram'),
             ],
           ),
         ),
