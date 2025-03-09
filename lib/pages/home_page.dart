@@ -17,7 +17,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   // LSU colors
   static const Color lsuPurple = Color(0xFF461D7C); // LSU Purple
-  static const Color lsuGold = Color(0xFFFDD023);   // LSU Gold
+  static const Color lsuGold = Color(0xFFE6C423);   // Slightly less bright LSU Gold
   
   // Progress value (0.0 to 1.0)
   double progressValue = 0.0;
@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     ),
                     child: const Icon(
                       Icons.explore,
-                      color: Colors.black,
+                      color: Color(0xFF461D7C), // Use LSU purple for the icon
                       size: 36,
                     ),
                   ),
@@ -244,32 +244,26 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   
   Widget _buildChallengeCard(String title, String subtitle, IconData icon, Color iconColor, VoidCallback onTap) {
     return Card(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 16),
       elevation: 0,
       color: Colors.white.withOpacity(0.15),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
+        side: const BorderSide(color: Colors.amber, width: 0.85),
       ),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
           child: Row(
             children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: iconColor.withOpacity(0.9),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(
-                  icon,
-                  color: Colors.white,
-                ),
+              Icon(
+                icon,
+                color: Colors.amber,
+                size: 30,
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: 18),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -277,11 +271,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     Text(
                       title,
                       style: const TextStyle(
-                        fontSize: 16,
+                        fontSize: 17,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
                     ),
+                    const SizedBox(height: 2),
                     Text(
                       subtitle,
                       style: TextStyle(
@@ -295,6 +290,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               const Icon(
                 Icons.chevron_right,
                 color: Colors.white,
+                size: 24,
               ),
             ],
           ),
