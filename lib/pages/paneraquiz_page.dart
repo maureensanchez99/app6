@@ -34,7 +34,7 @@ class Quiz extends StatefulWidget {
 class _Quiz extends State<Quiz> {
   int correctQuestions = 0;
   bool started = false;
-  int n = 2;
+  int n = 4;
 
   void incrementQuestions() {
     setState(() {
@@ -86,6 +86,50 @@ class _Quiz extends State<Quiz> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SnackQuestion(
+                function: incrementQuestions,
+                nextFunction: nextPage,
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                child: Text(
+                  "SCORE: $correctQuestions",
+                  style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic),
+                ),
+              )
+            ],
+          );
+        }
+        case 3:
+        {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              LunchQuestion(
+                function: incrementQuestions,
+                nextFunction: nextPage,
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                child: Text(
+                  "SCORE: $correctQuestions",
+                  style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic),
+                ),
+              )
+            ],
+          );
+        }
+        case 4:
+        {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              DinnerQuestion(
                 function: incrementQuestions,
                 nextFunction: nextPage,
               ),
@@ -511,6 +555,364 @@ class _SnackQuestion extends State<SnackQuestion> {
                       ),
                       Text(
                         'NON-DIET PEPSI!',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+
+
+class LunchQuestion extends StatefulWidget {
+  Function? function;
+  Function? nextFunction;
+  LunchQuestion({super.key, this.function, this.nextFunction});
+
+  @override
+  State<LunchQuestion> createState() => _LunchQuestion();
+}
+
+class _LunchQuestion extends State<LunchQuestion> {
+  bool answered = false;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
+          child: Text.rich(TextSpan(
+              text: "Which drink do Engineers pick to be ",
+              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+              children: [
+                TextSpan(
+                    text: 'Healthy',
+                    style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      decoration: TextDecoration.underline,
+                    )),
+                TextSpan(
+                  text: '?',
+                )
+              ])),
+        ),
+        Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 50),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 80, 0),
+                    child: OutlinedButton(
+                      onPressed: answered
+                          ? null
+                          : () => {
+                              answered = true,
+                              incorrectAnswer(context, widget.nextFunction),
+                              setState(() {})
+                            },
+                      style: ButtonStyle(
+                          shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)))),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: Image.asset('assets/soup1.png',
+                                  fit: BoxFit.fill, width: 200),
+                            ),
+                          ),
+                          Text(
+                            'SOUP!',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  OutlinedButton(
+                    onPressed: answered
+                        ? null
+                        : () => {
+                              answered = true,
+                              incorrectAnswer(context, widget.nextFunction),
+                              setState(() {})
+                            },
+                    style: ButtonStyle(
+                        shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)))),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Image.asset('assets/pepsi.png',
+                                fit: BoxFit.fill, width: 200),
+                          ),
+                        ),
+                        Text(
+                          'PEPSI!',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 80, 0),
+                  child: OutlinedButton(
+                    onPressed: answered
+                        ? null
+                        : () => {
+                              widget.function!(),
+                              answered = true,
+                              correctAnswer(context, widget.nextFunction)
+                            },
+                    style: ButtonStyle(
+                        shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)))),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Image.asset('assets/dietPepsi.png',
+                                fit: BoxFit.fill, width: 200),
+                          ),
+                        ),
+                        Text(
+                          'DIET-PEPSI!',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                OutlinedButton(
+                  onPressed: answered
+                      ? null
+                      : () => {
+                              answered = true,
+                              incorrectAnswer(context, widget.nextFunction),
+                              setState(() {})
+                            },
+                  style: ButtonStyle(
+                      shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)))),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Image.asset('assets/sbSmoothie.png',
+                              fit: BoxFit.fill, width: 200),
+                        ),
+                      ),
+                      Text(
+                        'S.B. SMOOTHIE!',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+
+
+class DinnerQuestion extends StatefulWidget {
+  Function? function;
+  Function? nextFunction;
+  DinnerQuestion({super.key, this.function, this.nextFunction});
+
+  @override
+  State<DinnerQuestion> createState() => _DinnerQuestion();
+}
+
+class _DinnerQuestion extends State<DinnerQuestion> {
+  bool answered = false;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
+          child: Text.rich(TextSpan(
+              text: "What is the ",
+              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+              children: [
+                TextSpan(
+                    text: 'MOST EFFICIENT',
+                    style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      decoration: TextDecoration.underline,
+                    )),
+                TextSpan(
+                  text: ' Engineer Dinner?',
+                )
+              ])),
+        ),
+        Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 50),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 80, 0),
+                    child: OutlinedButton(
+                      onPressed: answered
+                          ? null
+                          : () => {
+                              answered = true,
+                              incorrectAnswer(context, widget.nextFunction),
+                              setState(() {})
+                            },
+                      style: ButtonStyle(
+                          shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)))),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: Image.asset('assets/sandwich2.png',
+                                  fit: BoxFit.fill, width: 200),
+                            ),
+                          ),
+                          Text(
+                            'SANDWICH!!',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  OutlinedButton(
+                    onPressed: answered
+                        ? null
+                        : () => {
+                              answered = true,
+                              incorrectAnswer(context, widget.nextFunction),
+                              setState(() {})
+                            },
+                    style: ButtonStyle(
+                        shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)))),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Image.asset('assets/salad2.png',
+                                fit: BoxFit.fill, width: 200),
+                          ),
+                        ),
+                        Text(
+                          'SALAD!',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 80, 0),
+                  child: OutlinedButton(
+                    onPressed: answered
+                        ? null
+                        : () => {
+                              answered = true,
+                              incorrectAnswer(context, widget.nextFunction),
+                              setState(() {})
+                            },
+                    style: ButtonStyle(
+                        shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)))),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Image.asset('assets/pastries.png',
+                                fit: BoxFit.fill, width: 200),
+                          ),
+                        ),
+                        Text(
+                          'PASTIRES!!!',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                OutlinedButton(
+                  onPressed: answered
+                      ? null
+                      : () => {
+                              widget.function!(),
+                              answered = true,
+                              correctAnswer(context, widget.nextFunction)
+                            },
+                  style: ButtonStyle(
+                      shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)))),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Image.asset('assets/soup2.png',
+                              fit: BoxFit.fill, width: 200),
+                        ),
+                      ),
+                      Text(
+                        'SOUP!',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),
