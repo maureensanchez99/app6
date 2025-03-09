@@ -1,13 +1,34 @@
 import 'package:flutter/material.dart';
 import 'home_page.dart';
 
-class TutorialPage extends StatelessWidget {
+class TutorialPage extends StatefulWidget {
   const TutorialPage({super.key});
 
+  @override
+  State<TutorialPage> createState() => _TutorialPageState();
+}
+
+class _TutorialPageState extends State<TutorialPage> with SingleTickerProviderStateMixin {
   // LSU colors
   static const Color lsuPurple = Color(0xFF461D7C); // LSU Purple
   static const Color lsuGold = Color(0xFFFDD023);   // LSU Gold
-  static const Color lsuLightPurple = Color(0xFF8075A4); // Light purple for gradient
+  
+  late AnimationController _animationController;
+  
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3),
+    )..repeat(reverse: true);
+  }
+  
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,15 +39,23 @@ class TutorialPage extends StatelessWidget {
         backgroundColor: lsuPurple,
         foregroundColor: lsuGold,
       ),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [lsuGold, Color.fromARGB(255, 108, 63, 167)],
-            stops: [0.0, 0.7],
-          ),
-        ),
+      body: AnimatedBuilder(
+        animation: _animationController,
+        builder: (context, child) {
+          return Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color.lerp(lsuGold, lsuPurple, _animationController.value) ?? lsuGold,
+                  Color.lerp(lsuPurple, lsuGold, _animationController.value) ?? lsuPurple,
+                ],
+              ),
+            ),
+            child: child,
+          );
+        },
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Center(
