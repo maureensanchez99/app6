@@ -8,7 +8,13 @@ class ThirdFloor extends StatefulWidget {
   _ThirdFloorState createState() => _ThirdFloorState();
 }
 
-class _ThirdFloorState extends State<ThirdFloor> {
+class _ThirdFloorState extends State<ThirdFloor> with SingleTickerProviderStateMixin {
+  // Define LSU colors
+  static const Color lsuPurple = Color(0xFF461D7C);
+  static const Color lsuGold = Color(0xFFFDD023);
+
+  late AnimationController _animationController;
+
   // List of facts
   final List<String> facts = [
     'The third floor is primarily used as the office space for faculty and staff',
@@ -23,6 +29,21 @@ class _ThirdFloorState extends State<ThirdFloor> {
 
   String currentFact = ''; // To store the current random fact
 
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3),
+    )..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
   // Function to get a random fact
   void getRandomFact() {
     final random = Random();
@@ -35,41 +56,55 @@ class _ThirdFloorState extends State<ThirdFloor> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Third Floor Facts",
-          style: const TextStyle(
-            color: Color(0xFF461D7C),
+          style: TextStyle(
+            color: lsuPurple,
             fontWeight: FontWeight.bold,
           ),
-          ),
-        backgroundColor: Color(0xFFFDD023),
+        ),
+        backgroundColor: lsuGold,
         centerTitle: true,
       ),
-      backgroundColor:  Color(0xFF461D7C),
-       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF461D7C), Color(0xFFFDD023)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              // Displaying the current fact
-              Text(
-                currentFact.isEmpty ? 'Press the button to uncover a fact!' : currentFact,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFFFDD023)),
-                textAlign: TextAlign.center,
+      body: AnimatedBuilder(
+        animation: _animationController,
+        builder: (context, child) {
+          return Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color.lerp(lsuGold, lsuPurple, _animationController.value) ?? lsuGold,
+                  Color.lerp(lsuPurple, lsuGold, _animationController.value) ?? lsuPurple,
+                ],
               ),
-              const SizedBox(height: 30),
-              ElevatedButton(
-                onPressed: getRandomFact,
-                child: const Text('Generate Fact'),
+            ),
+            child: child,
+          );
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                // Displaying the current fact
+                Text(
+                  currentFact.isEmpty
+                      ? 'Press the button to uncover a fact!'
+                      : currentFact,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: lsuGold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 30),
+                ElevatedButton(
+                  onPressed: getRandomFact,
+                  child: const Text('Generate Fact'),
                 ),
               ],
             ),
