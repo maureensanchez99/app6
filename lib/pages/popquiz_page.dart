@@ -31,6 +31,16 @@ class QuizScreen extends StatefulWidget {
 class _QuizScreenState extends State<QuizScreen> {
   final List<Map<String, dynamic>> questions = [
     {
+      'question': 'Who is Patrick F. Taylor Hall named after?',
+      'options': [
+        'A former LSU president',
+        'An LSU engineering alumnus',
+        'A state governor',
+        'A philanthropist'
+      ],
+      'answerIndex': 1,
+    },
+    {
       'question': 'What is the largest academic building in Louisiana?',
       'options': [
         'RoyOMartin Auditorium',
@@ -69,6 +79,48 @@ class _QuizScreenState extends State<QuizScreen> {
       'question': 'What company funded the Sustainable Living Lab?',
       'options': ['Chevron', 'ExxonMobil', 'BASF', 'Shell'],
       'answerIndex': 2,
+    },
+    {
+      'question':
+          'What is the purpose of the Dow Chemical Unit Operations Lab?',
+      'options': [
+        'To study robotics',
+        'To perform chemical process experiments',
+        'To research sustainable living',
+        'To build computer processors'
+      ],
+      'answerIndex': 1,
+    },
+    {
+      'question': 'Which lab in PFT allows students to test driving behaviors?',
+      'options': [
+        'Robotics Lab',
+        'Civil Engineering Driving Simulator Lab',
+        'BASF Sustainable Living Lab',
+        'Proto Lab'
+      ],
+      'answerIndex': 1,
+    },
+    {
+      'question':
+          'Which space in PFT is a central hub for student organizations?',
+      'options': [
+        'The Commons',
+        'Cambre Atrium',
+        'RoyOMartin Auditorium',
+        'Dow Student Leadership Incubator'
+      ],
+      'answerIndex': 3,
+    },
+    {
+      'question': 'What feature makes the BIM Lab unique?',
+      'options': [
+        'It has 3D motion analysis systems',
+        'It allows virtual walkthroughs of buildings',
+        'It specializes in petroleum engineering',
+        'It contains a mini humanoid robot'
+      ],
+      'answerIndex': 1,
     },
   ];
 
@@ -117,11 +169,13 @@ class _QuizScreenState extends State<QuizScreen> {
 
   void checkAnswer(int selectedIndex) {
     setState(() {
-      selectedAnswerIndex = selectedIndex;
-      answerRevealed = true;
+      selectedAnswerIndex = selectedIndex; // Store selected answer
+      answerRevealed = true; // Reveal the correct answer
     });
-    timer?.cancel();
 
+    timer?.cancel(); // Stop the timer since the user answered
+
+    // Delay before proceeding to the next question, allowing UI to update
     Future.delayed(const Duration(seconds: 2), () {
       nextQuestion();
     });
