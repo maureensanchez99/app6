@@ -99,10 +99,22 @@ class _DrinkQuestion extends State<DrinkQuestion> {
             child: Text("data")),
         OutlinedButton(
           onPressed: answered ? null : () => widget.function!(),
+          style: ButtonStyle(
+              shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)))),
           child: Column(
             children: [
-              Image.network("https://www.panerabread.com/content/dam/panerabread/menu-omni/integrated-web/grid/rect/dark-roast-hot-coffee-medium.jpg.transform/rect-grid-image/image.20250308.jpg"),
-              Text('Outlined Button'),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 20, 0, 5),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.asset('assets/coffee.png',
+                      fit: BoxFit.fill, width: 200),
+                ),
+              ),
+              Text(
+                'CAFFIENE',
+              ),
             ],
           ),
         ),
