@@ -32,6 +32,7 @@ class Quiz extends StatefulWidget {
 
 class _Quiz extends State<Quiz> {
   int correctQuestions = 0;
+  bool started = false;
 
   void incrementQuestions() {
     setState(() {
@@ -39,9 +40,15 @@ class _Quiz extends State<Quiz> {
     });
   }
 
+  void startQuiz(){
+    setState(() {
+      started = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return started?Container(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -58,9 +65,31 @@ class _Quiz extends State<Quiz> {
           )
         ],
       ),
+    ):StartScreen(function: startQuiz,);
+  }
+}
+
+class StartScreen extends StatefulWidget {
+      Function? function;
+      StartScreen({super.key, this.function});
+
+       @override
+  State<StartScreen> createState() => _StartScreen();
+}
+
+class _StartScreen extends State<StartScreen>{
+  @override
+  Widget build(BuildContext context){
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text("data"),
+        TextButton(onPressed: ()=>widget.function!(), child: Text("START"))
+      ],
     );
   }
 }
+
 
 class DrinkQuestion extends StatefulWidget {
   Function? function;
