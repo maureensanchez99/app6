@@ -133,10 +133,15 @@ class _QuizScreenState extends State<QuizScreen> {
   ];
 
   int currentQuestionIndex = 0;
-  int remainingTime = 30;
+  int maxTime = 10; // Changed to 10 seconds
+  int remainingTime = 10;
   Timer? timer;
   int? selectedAnswerIndex;
   bool answerRevealed = false;
+
+  // Add score tracking
+  int score = 0;
+  String scoreMessage = '';
 
   void startTimer() {
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -153,6 +158,10 @@ class _QuizScreenState extends State<QuizScreen> {
   void revealAnswer() {
     setState(() {
       answerRevealed = true;
+      // When time runs out, treat as wrong answer
+      if (selectedAnswerIndex == null) {
+        updateScore(false, 0); // Time ran out - no speed bonus
+      }
     });
 
     Future.delayed(const Duration(seconds: 2), () {
@@ -165,9 +174,10 @@ class _QuizScreenState extends State<QuizScreen> {
     if (currentQuestionIndex < questions.length - 1) {
       setState(() {
         currentQuestionIndex++;
-        remainingTime = 30;
+        remainingTime = maxTime; // Reset to full time
         selectedAnswerIndex = null;
         answerRevealed = false;
+        scoreMessage = ''; // Clear the score message for next question
       });
       startTimer();
     } else {
@@ -175,13 +185,54 @@ class _QuizScreenState extends State<QuizScreen> {
     }
   }
 
+  void updateScore(bool isCorrect, int timeSpent) {
+    setState(() {
+      if (isCorrect) {
+        // Calculate bonus based on speed
+        int timeBonus = 0;
+        if (timeSpent <= 5) {
+          timeBonus = 5; // Extra 5 points for quick answers (5 seconds or less)
+        }
+
+        // Base points + time bonus
+        int pointsGained = 10 + timeBonus;
+        score += pointsGained;
+
+        // Update score message
+        if (timeBonus > 0) {
+          scoreMessage = '+10 points + $timeBonus speed bonus!';
+        } else {
+          scoreMessage = '+10 points!';
+        }
+      } else {
+        // Ensure score doesn't go below 0
+        if (score >= 10) {
+          score -= 10;
+          scoreMessage = '-10 points';
+        } else {
+          score = 0;
+          scoreMessage = 'No points deducted';
+        }
+      }
+    });
+  }
+
   void checkAnswer(int selectedIndex) {
+    // Calculate time spent on this question
+    int timeSpent = maxTime - remainingTime;
+
     timer?.cancel(); // Stop the timer since the user answered
+
+    final bool isCorrect =
+        selectedIndex == questions[currentQuestionIndex]['answerIndex'];
 
     setState(() {
       selectedAnswerIndex = selectedIndex; // Store selected answer
       answerRevealed = true; // Reveal the correct answer
     });
+
+    // Update score based on answer and time spent
+    updateScore(isCorrect, timeSpent);
 
     // Delay before proceeding to the next question, allowing UI to update and user to see feedback
     Future.delayed(const Duration(seconds: 2), () {
@@ -194,16 +245,18 @@ class _QuizScreenState extends State<QuizScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Quiz Completed!'),
-        content: const Text('You have finished the quiz!'),
+        content: Text('Final Score: $score points'),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
               setState(() {
                 currentQuestionIndex = 0;
-                remainingTime = 30;
+                remainingTime = maxTime;
                 selectedAnswerIndex = null;
                 answerRevealed = false;
+                score = 0; // Reset score for new game
+                scoreMessage = '';
               });
               startTimer();
             },
@@ -211,11 +264,14 @@ class _QuizScreenState extends State<QuizScreen> {
           ),
           TextButton(
             onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const HomePage(title: '',)),
-              ),
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const HomePage(
+                        title: '',
+                      )),
+            ),
             child: const Text('Return'),
-            )
+          )
         ],
       ),
     );
@@ -224,6 +280,7 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   void initState() {
     super.initState();
+    remainingTime = maxTime; // Initialize with the new max time
     startTimer();
   }
 
@@ -249,12 +306,67 @@ class _QuizScreenState extends State<QuizScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
-              'Time Left: $remainingTime sec',
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                  fontSize: 20, fontWeight: FontWeight.bold, color: Colors.red),
+            // Scoreboard section
+            Container(
+              padding: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                color: const Color(0xFF461D7C),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Score: $score',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Text(
+                    'Time Left: $remainingTime sec',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: remainingTime <= 5 ? Colors.yellow : Colors.white,
+                    ),
+                  ),
+                ],
+              ),
             ),
+
+            // Speed bonus indicator
+            if (remainingTime > 5)
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text(
+                  'Answer within ${remainingTime - 5} seconds for a speed bonus!',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontStyle: FontStyle.italic,
+                    color: Colors.deepOrange,
+                  ),
+                ),
+              ),
+
+            // Score message (appears when answer is revealed)
+            if (scoreMessage.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text(
+                  scoreMessage,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color:
+                        scoreMessage.contains('+') ? Colors.green : Colors.red,
+                  ),
+                ),
+              ),
+
             const SizedBox(height: 20),
             Text(
               question['question'],
