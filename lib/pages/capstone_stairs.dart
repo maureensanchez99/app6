@@ -17,7 +17,7 @@ class _CapstoneStairsState extends State<CapstoneStairs> {
     "OOWDEN",
     "TUCRTSURE",
     "DAN",
-    "KET",
+    "KAET",
     "LOOC",
     "PUCRITES",
   ];
