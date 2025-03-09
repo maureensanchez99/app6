@@ -138,8 +138,8 @@ class ResultsPage extends StatelessWidget {
                                 margin:
                                     const EdgeInsets.symmetric(vertical: 8.0),
                                 color: isCorrect
-                                    ? Colors.green.withOpacity(0.1)
-                                    : Colors.red.withOpacity(0.1),
+                                    ? Colors.green.withValues()
+                                    : Colors.red.withValues(),
                                 child: Padding(
                                   padding: const EdgeInsets.all(12.0),
                                   child: Column(
