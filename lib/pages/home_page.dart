@@ -83,12 +83,30 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     }
   }
   
-  // Navigate to a challenge and mark it as visited
+  // Navigate to a challenge with slide animation and mark it as visited
   void _navigateToChallenge(BuildContext context, Widget challenge, String challengeId) {
     _markChallengeVisited(challengeId);
+    
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => challenge),
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => challenge,
+        transitionDuration: const Duration(milliseconds: 400),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(1.0, 0.0);
+          const end = Offset.zero;
+          const curve = Curves.easeInOut;
+          
+          var tween = Tween(begin: begin, end: end).chain(
+            CurveTween(curve: curve),
+          );
+          
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        },
+      ),
     );
   }
   

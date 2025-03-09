@@ -30,6 +30,43 @@ class _TutorialPageState extends State<TutorialPage> with SingleTickerProviderSt
     super.dispose();
   }
 
+  // Navigate to homepage with circle reveal animation
+  void _navigateToHomeWithCircleAnimation(BuildContext context, Offset center) {
+    final RenderBox buttonBox = context.findRenderObject() as RenderBox;
+    final buttonPosition = buttonBox.localToGlobal(Offset.zero);
+    final buttonSize = buttonBox.size;
+    
+    // Calculate the center of the button
+    final buttonCenter = Offset(
+      buttonPosition.dx + buttonSize.width / 2,
+      buttonPosition.dy + buttonSize.height / 2,
+    );
+    
+    // Calculate the maximum radius needed to cover the screen
+    final screenSize = MediaQuery.of(context).size;
+    final maxRadius = screenSize.height > screenSize.width 
+        ? screenSize.height * 1.5 
+        : screenSize.width * 1.5;
+    
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => const HomePage(
+          title: 'PFT Scavenger Hunt',
+        ),
+        transitionDuration: const Duration(milliseconds: 780),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return ClipPath(
+            clipper: CircleRevealClipper(
+              center: buttonCenter,
+              radius: animation.value * maxRadius,
+            ),
+            child: child,
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,30 +141,25 @@ class _TutorialPageState extends State<TutorialPage> with SingleTickerProviderSt
                   ),
                 ),
                 const SizedBox(height: 40),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const HomePage(
-                          title: 'PFT Scavenger Hunt',
-                        ),
+                Builder(
+                  builder: (context) => ElevatedButton(
+                    onPressed: () {
+                      _navigateToHomeWithCircleAnimation(context, Offset.zero);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 40,
+                        vertical: 15,
                       ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 40,
-                      vertical: 15,
+                      backgroundColor: lsuGold,
+                      foregroundColor: lsuPurple,
                     ),
-                    backgroundColor: lsuGold,
-                    foregroundColor: lsuPurple,
-                  ),
-                  child: const Text(
-                    'Start the Hunt',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                    child: const Text(
+                      'Start the Hunt',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -175,5 +207,32 @@ class _TutorialPageState extends State<TutorialPage> with SingleTickerProviderSt
         ],
       ),
     );
+  }
+}
+
+// Custom clipper for circle reveal animation
+class CircleRevealClipper extends CustomClipper<Path> {
+  final Offset center;
+  final double radius;
+
+  CircleRevealClipper({
+    required this.center,
+    required this.radius,
+  });
+
+  @override
+  Path getClip(Size size) {
+    return Path()
+      ..addOval(
+        Rect.fromCircle(
+          center: center,
+          radius: radius,
+        ),
+      );
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return true;
   }
 }
