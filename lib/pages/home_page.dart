@@ -74,7 +74,7 @@ class HomePage extends StatelessWidget {
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: Colors.black),
               ),
-              child: const Text("Puzzle"),
+              child: const Text("Anagram"),
             ),
           ],
         ),
