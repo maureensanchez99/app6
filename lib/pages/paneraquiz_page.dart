@@ -106,11 +106,20 @@ class _StartScreen extends State<StartScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        Image.asset("assets/paneraLogo.png"),
         Text(
           "Let's learn about an Engineering Diet at Panera!",
-          style: TextStyle(),
+          style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
         ),
-        TextButton(onPressed: () => widget.function!(), child: Text("START"))
+        Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: TextButton(
+              onPressed: () => widget.function!(),
+              child: Text(
+                "START",
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              )),
+        )
       ],
     );
   }
