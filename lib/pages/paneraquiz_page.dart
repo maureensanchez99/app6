@@ -33,6 +33,7 @@ class Quiz extends StatefulWidget {
 class _Quiz extends State<Quiz> {
   int correctQuestions = 0;
   bool started = false;
+  int n = 0;
 
   void incrementQuestions() {
     setState(() {
@@ -40,60 +41,85 @@ class _Quiz extends State<Quiz> {
     });
   }
 
-  void startQuiz(){
+  void nextPage() {
     setState(() {
-      started = true;
+      n++;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return started?Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          DrinkQuestion(function: incrementQuestions),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
-            child: Text(
-              "SCORE: $correctQuestions",
-              style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic),
-            ),
-          )
-        ],
-      ),
-    ):StartScreen(function: startQuiz,);
+    switch (n) {
+      case 0:
+        {
+          return StartScreen(
+            function: nextPage,
+          );
+        }
+
+      case 1:
+        {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              DrinkQuestion(
+                function: incrementQuestions,
+                nextFunction: nextPage,
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                child: Text(
+                  "SCORE: $correctQuestions and n: $n",
+                  style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic),
+                ),
+              )
+            ],
+          );
+        }
+      case 2:
+        {
+          return Text('Page 3');
+        }
+
+      default:
+        return StartScreen(
+          function: nextPage,
+        );
+    } //StartScreen(function: startQuiz,);
   }
 }
 
 class StartScreen extends StatefulWidget {
-      Function? function;
-      StartScreen({super.key, this.function});
+  Function? function;
+  StartScreen({super.key, this.function});
 
-       @override
+  @override
   State<StartScreen> createState() => _StartScreen();
 }
 
-class _StartScreen extends State<StartScreen>{
+class _StartScreen extends State<StartScreen> {
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text("data"),
-        TextButton(onPressed: ()=>widget.function!(), child: Text("START"))
+        Text(
+          "Let's learn about an Engineering Diet at Panera!",
+          style: TextStyle(),
+        ),
+        TextButton(onPressed: () => widget.function!(), child: Text("START"))
       ],
     );
   }
 }
 
-
 class DrinkQuestion extends StatefulWidget {
   Function? function;
-  DrinkQuestion({super.key, this.function});
+  Function? nextFunction;
+  DrinkQuestion({super.key, this.function, this.nextFunction});
 
   @override
   State<DrinkQuestion> createState() => _DrinkQuestion();
@@ -137,7 +163,7 @@ class _DrinkQuestion extends State<DrinkQuestion> {
                           ? null
                           : () => {
                                 answered = true,
-                                incorrectAnswer(context),
+                                incorrectAnswer(context, widget.nextFunction),
                                 setState(() {})
                               },
                       style: ButtonStyle(
@@ -168,7 +194,7 @@ class _DrinkQuestion extends State<DrinkQuestion> {
                         : () => {
                               widget.function!(),
                               answered = true,
-                              correctAnswer(context)
+                              correctAnswer(context, widget.nextFunction)
                             },
                     style: ButtonStyle(
                         shape: WidgetStatePropertyAll(RoundedRectangleBorder(
@@ -204,7 +230,7 @@ class _DrinkQuestion extends State<DrinkQuestion> {
                         ? null
                         : () => {
                               answered = true,
-                              incorrectAnswer(context),
+                              incorrectAnswer(context, widget.nextFunction),
                               setState(() {})
                             },
                     style: ButtonStyle(
@@ -234,7 +260,7 @@ class _DrinkQuestion extends State<DrinkQuestion> {
                       ? null
                       : () => {
                             answered = true,
-                            incorrectAnswer(context),
+                            incorrectAnswer(context, widget.nextFunction),
                             setState(() {})
                           },
                   style: ButtonStyle(
@@ -267,19 +293,7 @@ class _DrinkQuestion extends State<DrinkQuestion> {
   }
 }
 
-class QuestionT extends StatelessWidget {
-  const QuestionT({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [Text("data")],
-    );
-  }
-}
-
-Future<void> correctAnswer(BuildContext context) {
+Future<void> correctAnswer(BuildContext context, Function? function) {
   return showDialog(
       barrierDismissible: false,
       context: context,
@@ -296,6 +310,7 @@ Future<void> correctAnswer(BuildContext context) {
           actions: [
             TextButton(
               onPressed: () {
+                function!();
                 Navigator.of(context).pop();
               },
               child: Text(
@@ -308,7 +323,7 @@ Future<void> correctAnswer(BuildContext context) {
       });
 }
 
-Future<void> incorrectAnswer(BuildContext context) {
+Future<void> incorrectAnswer(BuildContext context, Function? function) {
   return showDialog(
       barrierDismissible: false,
       context: context,
@@ -325,6 +340,7 @@ Future<void> incorrectAnswer(BuildContext context) {
           actions: [
             TextButton(
               onPressed: () {
+                function!();
                 Navigator.of(context).pop();
               },
               child: Text(
