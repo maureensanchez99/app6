@@ -38,6 +38,7 @@ class QuizScreen extends StatefulWidget {
 }
 
 class _QuizScreenState extends State<QuizScreen> {
+  List<int?> userAnswers = [];
   final List<Map<String, dynamic>> questions = [
     {
       'question': 'Who is Patrick F. Taylor Hall named after?',
@@ -159,6 +160,8 @@ class _QuizScreenState extends State<QuizScreen> {
   void revealAnswer() {
     setState(() {
       answerRevealed = true;
+      userAnswers[currentQuestionIndex] = null;
+
       // When time runs out, treat as wrong answer
       if (selectedAnswerIndex == null) {
         updateScore(false, 0); // Time ran out - no speed bonus
@@ -227,6 +230,8 @@ class _QuizScreenState extends State<QuizScreen> {
     final bool isCorrect =
         selectedIndex == questions[currentQuestionIndex]['answerIndex'];
 
+    userAnswers[currentQuestionIndex] = selectedIndex;
+
     setState(() {
       selectedAnswerIndex = selectedIndex; // Store selected answer
       answerRevealed = true; // Reveal the correct answer
@@ -249,10 +254,10 @@ class _QuizScreenState extends State<QuizScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => const ResultsPage(
-          score: 0,
-          totalTime: 0,
-          questions: null,
-          userAnswers: null,
+          score: score,
+          totalTime: totalTimeTaken,
+          questions: questions,
+          userAnswers: userAnswers,
         ),
       ),
     );
@@ -262,6 +267,7 @@ class _QuizScreenState extends State<QuizScreen> {
   void initState() {
     super.initState();
     remainingTime = maxTime; // Initialize with the new max time
+    userAnswers = List.filled(questions.length, null);
     startTimer();
   }
 
