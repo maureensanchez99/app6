@@ -116,6 +116,11 @@ class _WordSearchState extends State<WordSearch> {
               foundWords.add(currentWord);
               _storeFoundWordPath(currentWord, selectionPath);
               _resetSelection();
+
+              // Check if all words are found and show dialog
+              if (foundWords.length == words.length) {
+                _showCompletionDialog();
+              }
             }
           }
         }
@@ -125,6 +130,10 @@ class _WordSearchState extends State<WordSearch> {
 
   void _storeFoundWordPath(String word, List<List<int>> path) {
     foundWordPaths[word] = path;
+    // Keep the highlighted cells from this word as permanent highlights
+    for (var pos in path) {
+      highlighted[pos[0]][pos[1]] = true;
+    }
   }
 
   void _resetSelection() {
@@ -136,6 +145,26 @@ class _WordSearchState extends State<WordSearch> {
       selectionDirection = null;
       currentWord = "";
     });
+  }
+
+  void _showCompletionDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Congratulations!"),
+          content: const Text("Now that you've found all the words, where could this be in PFT?"),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -215,7 +244,6 @@ class _WordSearchState extends State<WordSearch> {
     if (highlighted[row][col]) {
       return Colors.yellow;  
     }
-
     return Colors.white;  
   }
 }
