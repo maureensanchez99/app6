@@ -34,7 +34,13 @@ class _ThirdFloorState extends State<ThirdFloor> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Third Floor Mysteries!'),
+        title: Text(
+          "Third Floor Mysteries",
+          style: const TextStyle(
+            color: Color(0xFF461D7C),
+            fontWeight: FontWeight.bold,
+          ),
+          ),
         backgroundColor: Color(0xFFFDD023),
         centerTitle: true,
       ),
@@ -48,7 +54,7 @@ class _ThirdFloorState extends State<ThirdFloor> {
               // Displaying the current fact
               Text(
                 currentFact.isEmpty ? 'Press the button to uncover a fact!' : currentFact,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFFFDD023)),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 30),
