@@ -85,8 +85,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   
   // Navigate to a challenge with slide animation and mark it as visited
   void _navigateToChallenge(BuildContext context, Widget challenge, String challengeId) {
-    _markChallengeVisited(challengeId);
-    
+    // mark the challenge as visited after the navigation completes
     Navigator.push(
       context,
       PageRouteBuilder(
@@ -107,7 +106,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           );
         },
       ),
-    );
+    ).then((_) {
+      // Mark the challenge as visited only after returning or page is fully loaded
+      _markChallengeVisited(challengeId);
+    });
   }
   
   @override
@@ -210,7 +212,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               ),
             ),
             
-            // Challenge list (scrollable)
+            // Challenge list 
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
