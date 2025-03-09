@@ -9,8 +9,8 @@ class WordSearch extends StatefulWidget {
 }
 
 class _WordSearchState extends State<WordSearch> {
-  final int gridSize = 6;
-  final List<String> words = ["ROBOT", "FIGHT", "CLUB", "DESIGN"];
+  final int gridSize = 5;
+  final List<String> words = ["ROBOT", "FIGHT", "CLUB", "LAB"];
   late List<List<String>> grid;
   late List<List<bool>> highlighted;
   String currentWord = "";
