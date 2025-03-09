@@ -225,7 +225,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   ),
                   _buildChallengeCard(
                     "Third Floor",
-                    "Explore the third floor challenge",
+                    "Find out more about the third floor of PFT",
                     Icons.stairs,
                     Colors.amber,
                     () => _navigateToChallenge(context, const ThirdFloor(), "third_floor"),
