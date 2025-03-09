@@ -7,11 +7,11 @@ class ThirdFloor extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Third Floor Challenge'),
+        title: const Text('Third Floor Mysteries!'),
         centerTitle: true,
       ),
       body: const Center(
-        child: Text('Third Floor Challenge Content'),
+        child: Text('Find out more about the mysterious third floor of the PFT'),
       ),
     );
   }
