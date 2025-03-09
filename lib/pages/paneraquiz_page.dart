@@ -94,29 +94,144 @@ class _DrinkQuestion extends State<DrinkQuestion> {
                 )
               ])),
         ),
-        TextButton(
-            onPressed: () => {widget.function!(), answered = true},
-            child: Text("data")),
-        OutlinedButton(
-          onPressed: answered ? null : () => widget.function!(),
-          style: ButtonStyle(
-              shape: WidgetStatePropertyAll(RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)))),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 20, 0, 5),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Image.asset('assets/coffee.png',
-                      fit: BoxFit.fill, width: 200),
+        Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 50),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 80, 0),
+                    child: OutlinedButton(
+                      onPressed: answered
+                          ? null
+                          : () => {
+                                answered = true,
+                                incorrectAnswer(context),
+                                setState(() {})
+                              },
+                      style: ButtonStyle(
+                          shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)))),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: Image.asset('assets/coffee.png',
+                                  fit: BoxFit.fill, width: 200),
+                            ),
+                          ),
+                          Text(
+                            'SALADS!',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  OutlinedButton(
+                    onPressed: answered
+                        ? null
+                        : () => {
+                              widget.function!(),
+                              answered = true,
+                              correctAnswer(context)
+                            },
+                    style: ButtonStyle(
+                        shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)))),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Image.asset('assets/coffee.png',
+                                fit: BoxFit.fill, width: 200),
+                          ),
+                        ),
+                        Text(
+                          'CAFFIENE!',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 80, 0),
+                  child: OutlinedButton(
+                    onPressed: answered
+                        ? null
+                        : () => {
+                              answered = true,
+                              incorrectAnswer(context),
+                              setState(() {})
+                            },
+                    style: ButtonStyle(
+                        shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)))),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Image.asset('assets/coffee.png',
+                                fit: BoxFit.fill, width: 200),
+                          ),
+                        ),
+                        Text(
+                          'SANDWICHES!',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-              Text(
-                'CAFFIENE',
-              ),
-            ],
-          ),
+                OutlinedButton(
+                  onPressed: answered
+                      ? null
+                      : () => {
+                            answered = true,
+                            incorrectAnswer(context),
+                            setState(() {})
+                          },
+                  style: ButtonStyle(
+                      shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)))),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Image.asset('assets/coffee.png',
+                              fit: BoxFit.fill, width: 200),
+                        ),
+                      ),
+                      Text(
+                        'BAGELS!',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )
+          ],
         ),
       ],
     );
@@ -133,4 +248,62 @@ class QuestionT extends StatelessWidget {
       children: [Text("data")],
     );
   }
+}
+
+Future<void> correctAnswer(BuildContext context) {
+  return showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Correct!",
+              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center),
+          content: Text(
+            "One point for you!",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            textAlign: TextAlign.center,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'Next Question',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              ),
+            )
+          ],
+        );
+      });
+}
+
+Future<void> incorrectAnswer(BuildContext context) {
+  return showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("WRONG!",
+              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center),
+          content: Text(
+            "No points for you!",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            textAlign: TextAlign.center,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'Next Question',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              ),
+            )
+          ],
+        );
+      });
 }
