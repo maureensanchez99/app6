@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'PFT Scavenger Hunt',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lime),
+        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF461D7C)),
         useMaterial3: true,
       ),
       home: const WelcomeScreen(),
