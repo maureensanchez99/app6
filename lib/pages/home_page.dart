@@ -279,6 +279,30 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     () => _navigateToChallenge(context, const BestProfessorQuiz(), "binary_clue"),
                     visitedChallenges.contains("binary_clue"),
                   ),
+                   _buildChallengeCard(
+                    "Jp's Riddle",
+                    "Can you solve this Riddle?",
+                    Icons.code,
+                    Colors.amber,
+                    () => _navigateToChallenge(context, const jpRiddle(), "jp_riddle"),
+                    visitedChallenges.contains("jp_riddle"),
+                  ),
+                   _buildChallengeCard(
+                    "Common Puzzle",
+                    "Can you find the animal?",
+                    Icons.code,
+                    Colors.amber,
+                    () => _navigateToChallenge(context, const commons(), "common"),
+                    visitedChallenges.contains("commons"),
+                  ),
+                   _buildChallengeCard(
+                    "Sudoku",
+                    "Can you finsih the sudoku?",
+                    Icons.code,
+                    Colors.amber,
+                    () => _navigateToChallenge(context, const sudoku(), "suduku"),
+                    visitedChallenges.contains("sudoku"),
+                  ),
                 ],
               ),
             ),
@@ -450,49 +474,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   ],
                 ),
 
-                child: const Text("Anagram", style: TextStyle(fontWeight: FontWeight.bold)),
+               // child: const Text("Anagram", style: TextStyle(fontWeight: FontWeight.bold)),
               ), 
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const jpRiddle()),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: lsuGold,
-                  foregroundColor: lsuPurple,
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                  side: const BorderSide(color: Colors.black),
-                ),
-                child: const Text("Jp's Riddle", style: TextStyle(fontWeight: FontWeight.bold)),
-              ), const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const commons()),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: lsuGold,
-                  foregroundColor: lsuPurple,
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                  side: const BorderSide(color: Colors.black),
-                ),
-                child: const Text("Commons", style: TextStyle(fontWeight: FontWeight.bold)),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const sudoku()),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: lsuGold,
-                  foregroundColor: lsuPurple,
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                  side: const BorderSide(color: Colors.black),
-                ),
-                child: const Text("Sudoku", style: TextStyle(fontWeight: FontWeight.bold)),
-              ),
               Icon(
                 Icons.chevron_right,
                 color: isVisited ? progressGreen : Colors.white,
