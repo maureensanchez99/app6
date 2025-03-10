@@ -148,6 +148,19 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   side: const BorderSide(color: Colors.black),
                 ),
                 child: const Text("Jp's Riddle", style: TextStyle(fontWeight: FontWeight.bold)),
+              ), const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const jpRiddle()),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: lsuGold,
+                  foregroundColor: lsuPurple,
+                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  side: const BorderSide(color: Colors.black),
+                ),
+                child: const Text("Commons", style: TextStyle(fontWeight: FontWeight.bold)),
               ),
             ],
           ),

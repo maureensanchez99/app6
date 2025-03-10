@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class jpRiddle extends StatefulWidget {
-  const jpRiddle({super.key});
-
-  @override
-  State<jpRiddle> createState() => _jpRiddle();
+class commons extends StatefulWidget {
+  const commons ({super.key});
+   @override
+  State<commons> createState() => _commons();
 }
 
-class _jpRiddle extends State<jpRiddle> {
-  final TextEditingController _controller = TextEditingController();
-  
+class _commons extends State<commons>{
   bool isCorrect = false;
-
-
+  final TextEditingController _controller = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -24,7 +20,6 @@ class _jpRiddle extends State<jpRiddle> {
   void _loadState() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      isCorrect = prefs.getBool('isCorrect') ?? false;
     });
   }
 
@@ -56,24 +51,13 @@ class _jpRiddle extends State<jpRiddle> {
           children: [
             const SizedBox(height: 20),
             const Text(
-              "Oh no!, Jp is wandering around PFT again. What's worse, he has some of your finest AA batteries.",
+              "Hello",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 24,
               ),
             ),
-            const SizedBox(height: 10),
-            const Text(
-              "It seems that he left a note to his whereabouts, but the prick encrypted it with some riddles and nonsense.",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 24,
-              ),
-            ),
-            const SizedBox(height: 20),
-            Image.asset('assets/Jpnote.PNG'),  // Make sure the image exists in the correct folder
-            const SizedBox(height: 20),
-
+           
             // Only show the input fields and button if the answer is not correct
             if (!isCorrect) ...[
               const Text(
@@ -149,3 +133,4 @@ class _jpRiddle extends State<jpRiddle> {
     );
   }
 }
+
