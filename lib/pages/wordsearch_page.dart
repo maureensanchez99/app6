@@ -8,7 +8,7 @@ class WordSearch extends StatefulWidget {
   _WordSearchState createState() => _WordSearchState();
 }
 
-class _WordSearchState extends State<WordSearch> {
+class _WordSearchState extends State<WordSearch> with SingleTickerProviderStateMixin {
   final int gridSize = 5;
   final List<String> words = ["ROBOT", "FIGHT", "CLUB", "LAB"];
   late List<List<String>> grid;
@@ -19,11 +19,27 @@ class _WordSearchState extends State<WordSearch> {
   List<int>? selectionDirection;
   List<List<int>> selectionPath = [];
   Map<String, List<List<int>>> foundWordPaths = {}; 
+  
+  // LSU colors
+  static const Color lsuPurple = Color(0xFF461D7C); // LSU Purple
+  static const Color lsuGold = Color(0xFFFDD023);   // LSU Gold
+  
+  late AnimationController _animationController;
 
   @override
   void initState() {
     super.initState();
     _generateGrid();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3),
+    )..repeat(reverse: true);
+  }
+  
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   void _generateGrid() {
@@ -173,63 +189,93 @@ class _WordSearchState extends State<WordSearch> {
     double gridSizePx = gridSize * (cellSize + 4);  
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Find four words that lead to the clue")),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Display found words
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: foundWords.map((word) => Text(
-                word,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              )).toList(),
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text("Words Found: ${foundWords.length}/${words.length}", style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 10),
-          Center(
-            child: SizedBox(
-              width: gridSizePx,
-              height: gridSizePx,
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: gridSize,
-                  childAspectRatio: 1.0,
-                ),
-                itemCount: gridSize * gridSize,
-                itemBuilder: (context, index) {
-                  int row = index ~/ gridSize;
-                  int col = index % gridSize;
-                  return GestureDetector(
-                    onTap: () => _selectLetter(row, col),
-                    child: Container(
-                      width: cellSize,
-                      height: cellSize,
-                      margin: const EdgeInsets.all(2),
-                      decoration: BoxDecoration(
-                        color: _getCellColor(row, col),
-                        border: Border.all(color: Colors.black),
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        grid[row][col],
-                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  );
-                },
+      appBar: AppBar(
+        title: const Text("Find four words that lead to the clue"),
+        backgroundColor: lsuGold,
+        foregroundColor: lsuPurple,
+      ),
+      body: AnimatedBuilder(
+        animation: _animationController,
+        builder: (context, child) {
+          return Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color.lerp(lsuGold, lsuPurple, _animationController.value) ?? lsuGold,
+                  Color.lerp(lsuPurple, lsuGold, _animationController.value) ?? lsuPurple,
+                ],
               ),
             ),
-          ),
-          const SizedBox(height: 10),
-          ElevatedButton(
-            onPressed: _resetSelection,
-            child: const Text("Reset Selection"),
-          ),
-        ],
+            child: child,
+          );
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Display found words
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: foundWords.map((word) => Text(
+                  word,
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                )).toList(),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              "Words Found: ${foundWords.length}/${words.length}", 
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)
+            ),
+            const SizedBox(height: 10),
+            Center(
+              child: SizedBox(
+                width: gridSizePx,
+                height: gridSizePx,
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: gridSize,
+                    childAspectRatio: 1.0,
+                  ),
+                  itemCount: gridSize * gridSize,
+                  itemBuilder: (context, index) {
+                    int row = index ~/ gridSize;
+                    int col = index % gridSize;
+                    return GestureDetector(
+                      onTap: () => _selectLetter(row, col),
+                      child: Container(
+                        width: cellSize,
+                        height: cellSize,
+                        margin: const EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          color: _getCellColor(row, col),
+                          border: Border.all(color: Colors.black),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          grid[row][col],
+                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: _resetSelection,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: lsuGold,
+                foregroundColor: lsuPurple,
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              ),
+              child: const Text("Reset Selection", style: TextStyle(fontWeight: FontWeight.bold)),
+            ),
+          ],
+        ),
       ),
     );
   }

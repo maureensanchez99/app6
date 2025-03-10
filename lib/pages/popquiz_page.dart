@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'home_page.dart';
+import 'resultsquiz_page.dart';
 
 void main() {
   runApp(const PopQuiz());
@@ -37,6 +37,7 @@ class QuizScreen extends StatefulWidget {
 }
 
 class _QuizScreenState extends State<QuizScreen> {
+  List<int?> userAnswers = [];
   final List<Map<String, dynamic>> questions = [
     {
       'question': 'Who is Patrick F. Taylor Hall named after?',
@@ -158,6 +159,8 @@ class _QuizScreenState extends State<QuizScreen> {
   void revealAnswer() {
     setState(() {
       answerRevealed = true;
+      userAnswers[currentQuestionIndex] = null;
+
       // When time runs out, treat as wrong answer
       if (selectedAnswerIndex == null) {
         updateScore(false, 0); // Time ran out - no speed bonus
@@ -226,6 +229,8 @@ class _QuizScreenState extends State<QuizScreen> {
     final bool isCorrect =
         selectedIndex == questions[currentQuestionIndex]['answerIndex'];
 
+    userAnswers[currentQuestionIndex] = selectedIndex;
+
     setState(() {
       selectedAnswerIndex = selectedIndex; // Store selected answer
       answerRevealed = true; // Reveal the correct answer
@@ -241,38 +246,22 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   void showResults() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Quiz Completed!'),
-        content: Text('Final Score: $score points'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              setState(() {
-                currentQuestionIndex = 0;
-                remainingTime = maxTime;
-                selectedAnswerIndex = null;
-                answerRevealed = false;
-                score = 0; // Reset score for new game
-                scoreMessage = '';
-              });
-              startTimer();
-            },
-            child: const Text('Restart'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const HomePage(
-                        title: '',
-                      )),
-            ),
-            child: const Text('Return'),
-          )
-        ],
+    // Calculate total time taken (in seconds)
+    int totalTimeTaken = 0;
+
+    // If you've been tracking time per question, add them up
+    // Otherwise estimate based on remaining time in last question
+    totalTimeTaken = questions.length * maxTime - remainingTime;
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ResultsPage(
+          score: score,
+          totalTime: totalTimeTaken,
+          questions: questions,
+          userAnswers: userAnswers,
+        ),
       ),
     );
   }
@@ -281,6 +270,7 @@ class _QuizScreenState extends State<QuizScreen> {
   void initState() {
     super.initState();
     remainingTime = maxTime; // Initialize with the new max time
+    userAnswers = List.filled(questions.length, null);
     startTimer();
   }
 
