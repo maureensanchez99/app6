@@ -1,3 +1,4 @@
+import 'package:app6/pages/commons.dart';
 import 'package:flutter/material.dart';
 import 'wordsearch_page.dart';
 import 'thirdfloor_page.dart';
@@ -152,7 +153,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               ElevatedButton(
                 onPressed: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const jpRiddle()),
+                  MaterialPageRoute(builder: (context) => const commons()),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: lsuGold,
