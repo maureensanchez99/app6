@@ -1,4 +1,5 @@
 import 'package:app6/pages/commons.dart';
+import 'package:app6/pages/sudoku.dart';
 import 'package:flutter/material.dart';
 import 'wordsearch_page.dart';
 import 'thirdfloor_page.dart';
@@ -162,6 +163,20 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   side: const BorderSide(color: Colors.black),
                 ),
                 child: const Text("Commons", style: TextStyle(fontWeight: FontWeight.bold)),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const sudoku()),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: lsuGold,
+                  foregroundColor: lsuPurple,
+                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  side: const BorderSide(color: Colors.black),
+                ),
+                child: const Text("Sudoku", style: TextStyle(fontWeight: FontWeight.bold)),
               ),
             ],
           ),

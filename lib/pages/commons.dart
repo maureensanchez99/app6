@@ -8,7 +8,7 @@ class commons extends StatefulWidget {
 }
 
 class _commons extends State<commons>{
-  bool isCorrect = false;
+  bool isCorrect3 = false;
   final TextEditingController _controller = TextEditingController();
 
   @override
@@ -21,7 +21,7 @@ class _commons extends State<commons>{
   void _loadState() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      isCorrect = prefs.getBool('isCorrect') ?? false;
+      isCorrect3 = prefs.getBool('isCorrect') ?? false;
     });
   }
 
@@ -78,7 +78,7 @@ class _commons extends State<commons>{
             const SizedBox(height: 20),
             Image.asset('assets/commons.PNG'),  // Make sure the image exists in the correct folder
             const SizedBox(height: 20),
-            if (!isCorrect) ...[
+            if (!isCorrect3)...[
               const Text(
                 "What animal can be found in the commons?",
                 style: TextStyle(
@@ -108,7 +108,7 @@ class _commons extends State<commons>{
                     if (enteredValue == "Duck" || enteredValue == "duck" || enteredValue == "Duckie" || enteredValue == "duckie")  {
                       // Correct answer
                       setState(() {
-                        isCorrect = true;  // Update the state to show "Correct" message
+                        isCorrect3 = true;  // Update the state to show "Correct" message
                       });
                       _saveState(true); // Save the state to SharedPreferences
                     } else {
@@ -128,7 +128,7 @@ class _commons extends State<commons>{
               ),
             ],
             // If the answer is correct, show the success message
-            if (isCorrect) ...[
+            if (isCorrect3) ...[
               const SizedBox(height: 20),
               const Icon(
                 Icons.check_circle_outline,  // Check mark icon

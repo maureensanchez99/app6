@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class sudoku extends StatefulWidget{
-  const sudoku({super.key})
+class sudoku extends StatefulWidget {
+  const sudoku({super.key});
+
   @override
   State<sudoku> createState() => _sudoku();
 }
 
-
-
-class _sudoku extends State<sudoku>{
+class _sudoku extends State<sudoku> {
   final TextEditingController _controller = TextEditingController();
   
-  bool isCorrect = false;
+  bool isCorrect2 = false;
 
 
   @override
@@ -25,7 +24,7 @@ class _sudoku extends State<sudoku>{
   void _loadState() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      isCorrect = prefs.getBool('isCorrect') ?? false;
+      isCorrect2 = prefs.getBool('isCorrect') ?? false;
     });
   }
 
@@ -34,8 +33,6 @@ class _sudoku extends State<sudoku>{
     final prefs = await SharedPreferences.getInstance();
     prefs.setBool('isCorrect', value);
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -59,12 +56,42 @@ class _sudoku extends State<sudoku>{
           children: [
             const SizedBox(height: 20),
             const Text(
-              "Find the PFT Study Rooms.",
+              "Jp gets bored sometimes and so he likes to do sudoku puzzles. Go find the PFT study rooms.",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 24,
               ),
             ),
+            const SizedBox(height: 10),
+            const Text(
+              "It seems that he left a sudoku puzzle in one of the room. Hopefully they're empty or else there will be an awkward conversation",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 24,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Image.asset('assets/sudoku.png'),  // Make sure the image exists in the correct folder
+            const SizedBox(height: 20),
+
+            // Only show the input fields and button if the answer is not correct
+            if (!isCorrect2) ...[
+              const Text(
+                "What is the code?:",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: _controller,  // Controller to manage input
+                keyboardType: TextInputType.number,  // Show numeric keyboard
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Enter a number',
+                ),
+              ),
               const SizedBox(height: 20),
 
               // Button to check the entered number
@@ -76,10 +103,10 @@ class _sudoku extends State<sudoku>{
                   if (enteredValue.isNotEmpty) {
                     // Check if the entered number matches the correct number (1344)
                     int? enteredNumber = int.tryParse(enteredValue);
-                    if (enteredNumber == 1344) {
+                    if (enteredNumber == 59882) {
                       // Correct answer
                       setState(() {
-                        isCorrect = true;  // Update the state to show "Correct" message
+                        isCorrect2 = true;  // Update the state to show "Correct" message
                       });
                       _saveState(true); // Save the state to SharedPreferences
                     } else {
@@ -99,7 +126,7 @@ class _sudoku extends State<sudoku>{
               ),
             ],
             // If the answer is correct, show the success message
-            if (isCorrect) ...[
+            if (isCorrect2) ...[
               const SizedBox(height: 20),
               const Icon(
                 Icons.check_circle_outline,  // Check mark icon
@@ -116,9 +143,9 @@ class _sudoku extends State<sudoku>{
                 ),
               ),
             ],
+          ],
         ),
       ),
     );
   }
 }
-
