@@ -6,6 +6,7 @@ import 'paneraquiz_page.dart';
 import 'capstone_stairs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'chevron_center.dart';
+import 'binary_clue.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
@@ -265,6 +266,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     Colors.amber,
                     () => _navigateToChallenge(context, const ChevronCenter(), "chevron_center"),
                     visitedChallenges.contains("chevron_center"),
+                  ),
+                  _buildChallengeCard(
+                    "Binary Clue",
+                    "Can you solve this binary challenge",
+                    Icons.help_outline,
+                    Colors.amber,
+                    () => _navigateToChallenge(context, const BestProfessorQuiz(), "binary_clue"),
+                    visitedChallenges.contains("binary_clue"),
                   ),
                 ],
               ),
