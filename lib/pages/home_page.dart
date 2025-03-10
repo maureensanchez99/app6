@@ -1,4 +1,5 @@
 import 'package:app6/pages/commons.dart';
+import 'package:app6/pages/final.dart';
 import 'package:app6/pages/sudoku.dart';
 import 'package:flutter/material.dart';
 import 'wordsearch_page.dart';
@@ -297,11 +298,19 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   ),
                    _buildChallengeCard(
                     "Sudoku",
-                    "Can you finsih the sudoku?",
+                    "Can you finish the sudoku?",
                     Icons.code,
                     Colors.amber,
                     () => _navigateToChallenge(context, const sudoku(), "suduku"),
                     visitedChallenges.contains("sudoku"),
+                  ),
+                  _buildChallengeCard(
+                    "Final Puzzle",
+                    "The final puzzle",
+                    Icons.code,
+                    Colors.amber,
+                    () => _navigateToChallenge(context, const FinalPuzzle(), "final"),
+                    visitedChallenges.contains("final"),
                   ),
                 ],
               ),
