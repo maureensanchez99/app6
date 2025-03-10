@@ -51,17 +51,34 @@ class _commons extends State<commons>{
           children: [
             const SizedBox(height: 20),
             const Text(
-              "Hello",
+              "There is an unknown part of PFT that people are not aware of.",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 24,
               ),
             ),
-           
-            // Only show the input fields and button if the answer is not correct
+            const SizedBox(height: 20),
+            const Text(
+              "Someone had put around pft a signature animal that one might find around",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 24,
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              "One of these animals can be found in the commons. Find it and write down the animal below",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 24,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Image.asset('assets/commons.webp'),  // Make sure the image exists in the correct folder
+            const SizedBox(height: 20),
             if (!isCorrect) ...[
               const Text(
-                "What is the room Jp is in?:",
+                "What animal can be found in the commons?",
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -73,7 +90,7 @@ class _commons extends State<commons>{
                 keyboardType: TextInputType.number,  // Show numeric keyboard
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  hintText: 'Enter a number',
+                  hintText: 'One Word',
                 ),
               ),
               const SizedBox(height: 20),
@@ -86,8 +103,7 @@ class _commons extends State<commons>{
                   
                   if (enteredValue.isNotEmpty) {
                     // Check if the entered number matches the correct number (1344)
-                    int? enteredNumber = int.tryParse(enteredValue);
-                    if (enteredNumber == 1344) {
+                    if (enteredValue == "Duck" || enteredValue == "duck" || enteredValue == "Duckie" || enteredValue == "duckie")  {
                       // Correct answer
                       setState(() {
                         isCorrect = true;  // Update the state to show "Correct" message
@@ -102,7 +118,7 @@ class _commons extends State<commons>{
                   } else {
                     // No input provided
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Please enter a number')),
+                      const SnackBar(content: Text('Please enter an answer')),
                     );
                   }
                 },
