@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'home_page.dart';
 
 class ChevronCenter extends StatelessWidget {
   const ChevronCenter({super.key});
@@ -34,6 +33,15 @@ class _IspyGameState extends State<IspyGame> {
     'TV',
     '3D Printer',
   ];
+
+  // Centralized definition of all item areas
+  final Map<String, Rect> itemAreas = {
+    'Computer': Rect.fromLTWH(100, 200, 300, 300),
+    'Whiteboard': Rect.fromLTWH(400, 100, 300, 300),
+    'Meeting Room': Rect.fromLTWH(600, 300, 300, 300),
+    'TV': Rect.fromLTWH(0, 0, 300, 300),
+    '3D Printer': Rect.fromLTWH(300, 400, 300, 300),
+  };
 
   final Map<String, bool> foundItems = {};
 
@@ -87,76 +95,45 @@ class _IspyGameState extends State<IspyGame> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('I Spy'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            // Navigate back to the previous screen
+            Navigator.of(context).pop();
+          },
+          tooltip: 'Back',
+        ),
       ),
-      body: Stack(
-        children: [
-          Image.network(
-            imageUrl,
-            width: double.infinity,
-            height: double.infinity,
-            fit: BoxFit.cover,
-          ),
-          // Overlay for item highlighting
-          ...itemsToFind.map((item) {
-            return Positioned.fill(
-              child: GestureDetector(
-                onTapDown: (details) {
-                  // Define the tap areas for each item (LARGER BOXES)
-                  switch (item) {
-                    case 'Computer':
-                      if (details.localPosition.dx >= 100 && // Increased tap area
-                          details.localPosition.dx <= 400 && // Increased tap area
-                          details.localPosition.dy >= 200 && // Increased tap area
-                          details.localPosition.dy <= 500) { // Increased tap area
-                        checkItemFound(item);
-                      }
-                      break;
-                    case 'Whiteboard':
-                      if (details.localPosition.dx >= 400 && // Increased tap area
-                          details.localPosition.dx <= 700 && // Increased tap area
-                          details.localPosition.dy >= 100 && // Increased tap area
-                          details.localPosition.dy <= 400) { // Increased tap area
-                        checkItemFound(item);
-                      }
-                      break;
-                    case 'Meeting Room':
-                      if (details.localPosition.dx >= 600 && // Increased tap area
-                          details.localPosition.dx <= 900 && // Increased tap area
-                          details.localPosition.dy >= 300 && // Increased tap area
-                          details.localPosition.dy <= 600) { // Increased tap area
-                        checkItemFound(item);
-                      }
-                      break;
-                    case 'TV':
-                      if (details.localPosition.dx >= 0 && // Increased tap area
-                          details.localPosition.dx <= 300 && // Increased tap area
-                          details.localPosition.dy >= 0 && // Increased tap area
-                          details.localPosition.dy <= 300) { // Increased tap area
-                        checkItemFound(item);
-                      }
-                      break;
-                    case '3D Printer':
-                      if (details.localPosition.dx >= 300 && // Increased tap area
-                          details.localPosition.dx <= 600 && // Increased tap area
-                          details.localPosition.dy >= 400 && // Increased tap area
-                          details.localPosition.dy <= 700) { // Increased tap area
-                        checkItemFound(item);
-                      }
-                      break;
-                  }
-                },
-                child: CustomPaint(
-                  painter: HighlightPainter(
-                    itemName: item,
-                    isFound: foundItems[item]!,
-                    imageSize: Size(MediaQuery.of(context).size.width,
-                        MediaQuery.of(context).size.height),
-                  ),
-                ),
+      body: GestureDetector(
+        onTapDown: (details) {
+          final position = details.localPosition;
+          print("Tap at: ${position.dx}, ${position.dy}");
+          
+          // Check if the tap position is within any of the item areas
+          itemAreas.forEach((itemName, rect) {
+            if (rect.contains(Offset(position.dx, position.dy))) {
+              checkItemFound(itemName);
+            }
+          });
+        },
+        child: Stack(
+          children: [
+            Image.network(
+              imageUrl,
+              width: double.infinity,
+              height: double.infinity,
+              fit: BoxFit.cover,
+            ),
+            // Overlay for item highlighting
+            CustomPaint(
+              size: Size.infinite,
+              painter: HighlightPainter(
+                foundItems: foundItems,
+                itemAreas: itemAreas,
               ),
-            );
-          }).toList(),
-        ],
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: BottomAppBar(
         child: Row(
@@ -174,72 +151,40 @@ class _IspyGameState extends State<IspyGame> {
 }
 
 class HighlightPainter extends CustomPainter {
-  final String itemName;
-  final bool isFound;
-  final Size imageSize;
+  final Map<String, bool> foundItems;
+  final Map<String, Rect> itemAreas;
 
   HighlightPainter({
-    required this.itemName,
-    required this.isFound,
-    required this.imageSize,
+    required this.foundItems,
+    required this.itemAreas,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
-    if (!isFound) return;
-
-    final paint = Paint()
+    // Draw outlines for all items
+    final outlinePaint = Paint()
       ..color = Colors.red.withOpacity(0.5)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 5;
 
-    // Highlight the clickable areas even if the item is not found
-    switch (itemName) {
-      case 'Computer':
-        canvas.drawRect(Rect.fromLTWH(100, 200, 300, 300), paint);
-        break;
-      case 'Whiteboard':
-        canvas.drawRect(Rect.fromLTWH(400, 100, 300, 300), paint);
-        break;
-      case 'Meeting Room':
-        canvas.drawRect(Rect.fromLTWH(600, 300, 300, 300), paint);
-        break;
-      case 'TV':
-        canvas.drawRect(Rect.fromLTWH(0, 0, 300, 300), paint);
-        break;
-      case '3D Printer':
-        canvas.drawRect(Rect.fromLTWH(300, 400, 300, 300), paint);
-        break;
-    }
-    
-    // If the item is found, draw a filled rectangle on top
-    if (isFound) {
-      final fillPaint = Paint()
-        ..color = Colors.green.withOpacity(0.5)
-        ..style = PaintingStyle.fill;
+    itemAreas.forEach((itemName, rect) {
+      canvas.drawRect(rect, outlinePaint);
+    });
 
-      switch (itemName) {
-        case 'Computer':
-          canvas.drawRect(Rect.fromLTWH(100, 200, 300, 300), fillPaint);
-          break;
-        case 'Whiteboard':
-          canvas.drawRect(Rect.fromLTWH(400, 100, 300, 300), fillPaint);
-          break;
-        case 'Meeting Room':
-          canvas.drawRect(Rect.fromLTWH(600, 300, 300, 300), fillPaint);
-          break;
-        case 'TV':
-          canvas.drawRect(Rect.fromLTWH(0, 0, 300, 300), fillPaint);
-          break;
-        case '3D Printer':
-          canvas.drawRect(Rect.fromLTWH(300, 400, 300, 300), fillPaint);
-          break;
+    // Draw fill for found items
+    final fillPaint = Paint()
+      ..color = Colors.green.withOpacity(0.5)
+      ..style = PaintingStyle.fill;
+
+    foundItems.forEach((itemName, isFound) {
+      if (isFound && itemAreas.containsKey(itemName)) {
+        canvas.drawRect(itemAreas[itemName]!, fillPaint);
       }
-    }
+    });
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
+  bool shouldRepaint(covariant HighlightPainter oldDelegate) {
+    return oldDelegate.foundItems != foundItems;
   }
 }

@@ -258,6 +258,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     () => _navigateToChallenge(context, const CapstoneStairs(), "anagram"),
                     visitedChallenges.contains("anagram"),
                   ),
+                  _buildChallengeCard(
+                    "Chevron Center Challenge",
+                    "Discover resources the Chevron Center offers to students",
+                    Icons.text_fields,
+                    Colors.amber,
+                    () => _navigateToChallenge(context, const ChevronCenter(), "chevron_center"),
+                    visitedChallenges.contains("chevron_center"),
+                  ),
                 ],
               ),
             ),
@@ -352,17 +360,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   ),
                 ],
               ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ChevronCenter()),
-              ),
-              style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: Colors.black),
-              ),
-              child: const Text("Chevron Center"),
             ),
           ],
         ),
