@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   double progressValue = 0.0;
   
   // Challenge tracking
-  final int totalChallenges = 5;
+  final int totalChallenges = 7;
   Set<String> visitedChallenges = {};
   
   late AnimationController _animationController;
@@ -269,8 +269,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   ),
                   _buildChallengeCard(
                     "Binary Clue",
-                    "Can you solve this binary challenge",
-                    Icons.help_outline,
+                    "Can you solve this binary challenge?",
+                    Icons.code,
                     Colors.amber,
                     () => _navigateToChallenge(context, const BestProfessorQuiz(), "binary_clue"),
                     visitedChallenges.contains("binary_clue"),

@@ -141,6 +141,10 @@ class _TutorialPageState extends State<TutorialPage> with SingleTickerProviderSt
                         '7',
                         'Find all the cool items in the Chevron Center and learn what they do',
                       ),
+                      _buildTutorialStep(
+                        '8',
+                        'Figure out what the binary means to find the best professors in PFT!',
+                      ),
                     ],
                   ),
                 ),
