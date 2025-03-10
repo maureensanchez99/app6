@@ -159,12 +159,10 @@ class _IspyGameState extends State<IspyGame> {
       body: GestureDetector(
         onTapDown: (details) {
           final position = details.localPosition;
-          print("Tap at: ${position.dx}, ${position.dy}");
           
           // Check if the tap position is within any of the item areas
           itemAreas.forEach((itemName, rect) {
             if (rect.contains(Offset(position.dx, position.dy))) {
-              print("$itemName tapped");
               checkItemFound(itemName);
             }
           });
