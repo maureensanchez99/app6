@@ -10,6 +10,7 @@ class commons extends StatefulWidget {
 class _commons extends State<commons>{
   bool isCorrect = false;
   final TextEditingController _controller = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -20,6 +21,7 @@ class _commons extends State<commons>{
   void _loadState() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
+      isCorrect = prefs.getBool('isCorrect') ?? false;
     });
   }
 
@@ -35,7 +37,7 @@ class _commons extends State<commons>{
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 101, 112, 0),
         title: const Text(
-          "Jp's Riddle",
+          "The Commons",
           style: TextStyle(
             color: Color.fromARGB(255, 228, 228, 228),
             fontSize: 30,
@@ -74,7 +76,7 @@ class _commons extends State<commons>{
               ),
             ),
             const SizedBox(height: 20),
-            Image.asset('assets/commons.webp'),  // Make sure the image exists in the correct folder
+            Image.asset('assets/commons.PNG'),  // Make sure the image exists in the correct folder
             const SizedBox(height: 20),
             if (!isCorrect) ...[
               const Text(
