@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'home_page.dart';
 
 class ChevronCenter extends StatelessWidget {
   const ChevronCenter({super.key});
@@ -6,10 +7,14 @@ class ChevronCenter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'I Spy',
+      title: 'Chevron Center',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: const Color(0xFF461D7C), // LSU Purple
+        scaffoldBackgroundColor: const Color(0xFFFDD023),
       ),
+      routes: {
+        '/home': (context) => HomePage(title: 'home_page',),
+      },
       home: const IspyGame(),
     );
   }
@@ -141,12 +146,12 @@ class _IspyGameState extends State<IspyGame> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('I Spy'),
+        title: const Text('Find the Items Below in the Picture'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             // Navigate back to the previous screen
-            Navigator.of(context).pop();
+            Navigator.pushReplacementNamed(context, '/home');
           },
           tooltip: 'Back',
         ),
@@ -189,7 +194,7 @@ class _IspyGameState extends State<IspyGame> {
           children: itemsToFind.map((item) {
             return Chip(
               label: Text(item),
-              backgroundColor: foundItems[item]! ? Colors.green : Colors.grey,
+              backgroundColor: foundItems[item]! ? const Color(0xFF461D7C) : const Color(0xFFFDD023),
             );
           }).toList(),
         ),
