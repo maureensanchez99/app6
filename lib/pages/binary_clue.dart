@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // Import for Clipboard
 
 class BestProfessorQuiz extends StatefulWidget {
   const BestProfessorQuiz({super.key});
@@ -71,10 +72,15 @@ class _BestProfessorQuizState extends State<BestProfessorQuiz> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
-              const Text(
+              // Make the binary text selectable and copyable
+              SelectableText(
                 '01000100 01110010 00101110 00100000 01010011 01101000 01100101 01110000 01101000 01100101 01110010 01100100',
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16),
                 textAlign: TextAlign.center,
+                toolbarOptions: const ToolbarOptions(
+                  copy: true,
+                  selectAll: true,
+                ),
               ),
               const SizedBox(height: 40),
               TextField(
