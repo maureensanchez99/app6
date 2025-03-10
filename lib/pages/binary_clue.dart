@@ -96,7 +96,10 @@ class _BestProfessorQuizState extends State<BestProfessorQuiz> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF461D7C), // LSU Purple
                 ),
-                child: const Text('Submit'),
+                child: const Text(
+                  'Submit',
+                  style: TextStyle(color: Color(0xFFFDD023)), // LSU Gold
+                ),
               ),
             ],
           ),
