@@ -261,7 +261,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   _buildChallengeCard(
                     "Chevron Center Challenge",
                     "Discover resources the Chevron Center offers to students",
-                    Icons.text_fields,
+                    Icons.help_outline,
                     Colors.amber,
                     () => _navigateToChallenge(context, const ChevronCenter(), "chevron_center"),
                     visitedChallenges.contains("chevron_center"),

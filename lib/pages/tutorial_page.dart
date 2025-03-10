@@ -137,6 +137,10 @@ class _TutorialPageState extends State<TutorialPage> with SingleTickerProviderSt
                         '6',
                         'Solve the anagram to find the next spot.',
                       ),
+                      _buildTutorialStep(
+                        '7',
+                        'Find all the cool items in the Chevron Center and learn what they do',
+                      ),
                     ],
                   ),
                 ),
