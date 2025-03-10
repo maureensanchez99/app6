@@ -1,12 +1,16 @@
+import 'package:app6/pages/commons.dart';
+import 'package:app6/pages/sudoku.dart';
 import 'package:flutter/material.dart';
 import 'wordsearch_page.dart';
 import 'thirdfloor_page.dart';
 import 'popquiz_page.dart';
 import 'paneraquiz_page.dart';
 import 'capstone_stairs.dart';
+import 'Jp_riddle.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'chevron_center.dart';
 import 'binary_clue.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
@@ -445,6 +449,49 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     ),
                   ],
                 ),
+
+                child: const Text("Anagram", style: TextStyle(fontWeight: FontWeight.bold)),
+              ), 
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const jpRiddle()),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: lsuGold,
+                  foregroundColor: lsuPurple,
+                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  side: const BorderSide(color: Colors.black),
+                ),
+                child: const Text("Jp's Riddle", style: TextStyle(fontWeight: FontWeight.bold)),
+              ), const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const commons()),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: lsuGold,
+                  foregroundColor: lsuPurple,
+                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  side: const BorderSide(color: Colors.black),
+                ),
+                child: const Text("Commons", style: TextStyle(fontWeight: FontWeight.bold)),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const sudoku()),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: lsuGold,
+                  foregroundColor: lsuPurple,
+                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  side: const BorderSide(color: Colors.black),
+                ),
+                child: const Text("Sudoku", style: TextStyle(fontWeight: FontWeight.bold)),
               ),
               Icon(
                 Icons.chevron_right,
